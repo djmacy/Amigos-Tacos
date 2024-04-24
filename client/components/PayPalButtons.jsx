@@ -1,5 +1,5 @@
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import { PaymentForm } from "./PaymentForm";
+import { PaymentForm } from "./PaymentForm.jsx";
 import { useState, useEffect } from "react";
 
 const PayPalButtons = () => {

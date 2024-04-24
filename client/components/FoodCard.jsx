@@ -17,12 +17,21 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
         quantity: ''
     });
 
-    const quantity = [
-        {label: "One", value: "1"},
-        {label: "Two", value: "2"},
-        {label: "Three", value: "3"},
-        {label: "Four", value: "4"},
-    ]
+    function createObjectList(number) {
+        let objectList = [];
+        const labels = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"];
+        for (let i = 0; i < number; i++) {
+            let obj = {
+                label: labels[i],
+                value: (i+1).toString()
+            };
+            objectList.push(obj);
+        }
+        return objectList;
+
+    }
+
+    const quantity = createObjectList(maxQuantity);
 
     const quantityChange = (selectedOption) => {
         if (!selectedOption) {
