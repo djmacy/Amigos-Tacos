@@ -1,0 +1,200 @@
+/* Navbar.css */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fdecbe;
+    /* background-color: rgba(253, 236, 190, 0.3); /* Set initial background with alpha 0 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    transition: background-color 1s ease; /* Add transition effect for smooth change */
+    z-index: 1000;
+}
+
+nav.scrolled {
+    background-color: #fdecbe;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.navbar-link a {
+    text-decoration: none;
+    margin: 20px;
+    color: black;
+    font-size: 20px;
+    /* font-family: "Caveat", cursive;*/
+    font-weight: 600;
+    display: inline-block;
+    position: relative;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+    /*color: #534d3e;*/
+    /*  padding: 8px 20px; /* Add padding for better clickability */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: color 0.3s, border-bottom 0.3s ease-in-out;
+}
+
+
+.navbar-link a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background-color: #000;  /* Set your desired line color */
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+}
+
+.navbar-link a:hover {
+    color: black;
+}
+
+.navbar-link a:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+.burger-menu {
+    height: 100%;
+    margin-right: 10px;
+    width: 4em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.burger-bar {
+    margin-right: 10px;
+    width: 4em;
+    height: 0.5em;
+    background-color: #534d3e;
+    border-radius: 0.5em;
+}
+
+.menu {
+    width: 40%;
+    height: 100vh;
+    background-color: #534d3e;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    z-index: 1;
+}
+
+@keyframes slideInRight {
+    from {
+        left: -100%; /* Start position off the screen to the left */
+    }
+    to {
+        left: 0; /* End position at the left edge of the screen */
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        left: 0; /* Start position off the screen to the left */
+    }
+    to {
+        left: -100%; /* End position at the left edge of the screen */
+    }
+}
+
+.hidden {
+    /*display: none;*/
+    animation: slideInLeft 0.5s forwards; /* Apply animation */
+
+}
+
+.visible {
+    display: inherit;
+    animation: slideInRight 0.5s forwards; /* Apply animation */
+    /*background: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+    /* backdrop-filter: blur(8px); /* Apply blur effect */
+}
+
+.visible ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    z-index: 1;
+    margin-top: 100px;
+}
+
+.visible li {
+    margin: 10px;
+    font-size: 30px;
+    /*font-family: "Caveat", cursive;
+    /*display: inherit;*/
+}
+
+.visible a {
+    color: white;
+    text-decoration: none;
+}
+
+.burger-bar.clicked:nth-child(1) {
+    transform: rotate(45deg) translate(0.75em, 1.25em);
+    transition: ease-out 0.5s;
+}
+
+.burger-bar.clicked:nth-child(2) {
+    transform: scale(0.01);
+    transition: ease-out 0.5s;
+}
+
+.burger-bar.clicked:nth-child(3) {
+    transform: rotate(135deg) translate(-0.5em, 1em);
+    transition: ease-out 0.5s;
+}
+
+.burger-bar:nth-child(1) {
+    margin-top: 26px;
+}
+
+.burger-bar:nth-child(3) {
+    margin-bottom: 26px;
+}
+
+.burger-bar.unclicked {
+    transform: rotate(0) translate(0);
+    transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s;
+}
+
+@media only screen and (max-width: 350px) {
+    .burger-menu {
+        height: 100%;
+        margin-right: 10px;
+        width: 3em;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+
+    .burger-bar {
+        margin-right: 10px;
+        width: 3em;
+        height: 0.5em;
+        background-color: #534d3e;
+        border-radius: 0.5em;
+    }
+}
