@@ -2,7 +2,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { PaymentForm } from "./PaymentForm.jsx";
 import { useState, useEffect } from "react";
 
-const PayPalButtons = () => {
+const PayPalButtons = ({cart}) => {
     const [clientToken, setClientToken] = useState(null);
 
     const initialOptions = {
@@ -27,7 +27,7 @@ const PayPalButtons = () => {
         <>
             {clientToken ? (
                 <PayPalScriptProvider options={initialOptions}>
-                    <PaymentForm />
+                    <PaymentForm cart={cart}/>
                 </PayPalScriptProvider>
             ) : (
                 <h4>WAITING ON CLIENT TOKEN</h4>

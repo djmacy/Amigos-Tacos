@@ -7,8 +7,8 @@ import {
   PayPalButtons,
   usePayPalHostedFields,
 } from "@paypal/react-paypal-js";
-
-async function createOrderCallback() {
+//**********Cart must be a list of objects
+async function createOrderCallback(cart) {
   try {
     const response = await fetch("/api/orders", {
       method: "POST",
@@ -18,12 +18,7 @@ async function createOrderCallback() {
       // use the "body" param to optionally pass additional order information
       // like product ids and quantities
       body: JSON.stringify({
-        cart: [
-          {
-            id: "YOUR_PRODUCT_ID",
-            quantity: "YOUR_PRODUCT_QUANTITY",
-          },
-        ],
+        cart: cart,
       }),
     });
 
@@ -136,7 +131,7 @@ const Message = ({ content }) => {
   return <p>{content}</p>;
 };
 
-export const PaymentForm = () => {
+export const PaymentForm = ({cart}) => {
   const [message, setMessage] = useState("");
   return (
     <div className={styles.form}>
@@ -147,11 +142,11 @@ export const PaymentForm = () => {
           layout: "vertical", //default value. Can be changed to horizontal
         }}
         styles={{ marginTop: "4px", marginBottom: "4px" }}
-        createOrder={createOrderCallback}
+        createOrder={createOrderCallback(cart)}
         onApprove={async (data) => setMessage(await onApproveCallback(data))}
       />
 
-      <PayPalHostedFieldsProvider createOrder={createOrderCallback}>
+      <PayPalHostedFieldsProvider createOrder={createOrderCallback(cart)}>
         <div style={{ marginTop: "4px", marginBottom: "4px" }}>
           <PayPalHostedField
             id="card-number"

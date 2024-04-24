@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 
 const Home = () => {
     const [totalPrice, setTotalPrice] = useState(0); // State to keep track of total price
+    const [cart, setCart] = useState([]);
     const [foodCards, setFoodCards] = useState([
         { title: "Quesabirrias", hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 4, maxQuantity: 3, quantity: 0},
         { title: "Loko Tacos", hasOnions: true, hasCilantro: true, price: 3, maxQuantity: 4, quantity: 0}
@@ -16,15 +17,16 @@ const Home = () => {
         setFoodCards(updatedFoodCards);
     };
 
-
     useEffect(() => {
         let total = 0;
+        let newCart = [];
         foodCards.forEach(foodCard => {
             total += foodCard.price * foodCard.quantity;
+            newCart.push({id: foodCard.title, quantity: foodCard.quantity})
         });
         setTotalPrice(total);
+        setCart(newCart);
     }, [foodCards]);
-
 
     return (
         <>
@@ -43,7 +45,7 @@ const Home = () => {
                 />
             ))}
             <p>Total Price: ${totalPrice}</p>
-            {totalPrice > 0 ?  <PayPalButtons/>: null}
+            {totalPrice > 0 ?  <PayPalButtons cart={cart}/>: null}
         </>
     );
 };
