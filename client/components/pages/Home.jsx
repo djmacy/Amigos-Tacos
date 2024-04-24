@@ -1,19 +1,47 @@
 import PayPalButtons from "../PayPalButtons.jsx";
 import FoodCard from "../FoodCard.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const Home = () => {
     const [totalPrice, setTotalPrice] = useState(0); // State to keep track of total price
+    const [foodCards, setFoodCards] = useState([
+        { title: "Quesabirrias", hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 4, maxQuantity: 3, quantity: 0},
+        { title: "Loko Tacos", hasOnions: true, hasCilantro: true, price: 3, maxQuantity: 4, quantity: 0}
+    ]);
 
-    // Function to update total price
-    const updateTotalPrice = (newPrice) => {
-        setTotalPrice(newPrice);
-        console.log("Total Price: " + newPrice.toFixed(2).toString());
+
+    const handleQuantityChange = (index, newQuantity) => {
+        const updatedFoodCards = [...foodCards];
+        updatedFoodCards[index].quantity = newQuantity;
+        setFoodCards(updatedFoodCards);
     };
+
+
+    useEffect(() => {
+        let total = 0;
+        foodCards.forEach(foodCard => {
+            total += foodCard.price * foodCard.quantity;
+        });
+        setTotalPrice(total);
+    }, [foodCards]);
+
+
     return (
         <>
-            <FoodCard title="Quesabirrias" hasOnions={true} hasCilantro={true} hasSalsaVerde={true} hasSalsaRojo={true} price="4"  maxQuantity={3} onPriceChange={updateTotalPrice}/>
-            <FoodCard title="Loko Tacos" hasOnions={true} hasCilantro={true} price="3" maxQuantity={4} onPriceChange={updateTotalPrice}/>
+            {foodCards.map((foodCard, index) => (
+                <FoodCard
+                    key={index}
+                    title={foodCard.title}
+                    hasOnions={foodCard.hasOnions}
+                    hasCilantro={foodCard.hasCilantro}
+                    hasSalsaVerde={foodCard.hasSalsaVerde}
+                    hasSalsaRojo={foodCard.hasSalsaRojo}
+                    price={foodCard.price}
+                    maxQuantity={foodCard.maxQuantity}
+                    quantity={foodCard.quantity}
+                    onQuantityChange={newQuantity => handleQuantityChange(index, newQuantity)}
+                />
+            ))}
             <p>Total Price: ${totalPrice}</p>
             {totalPrice > 0 ?  <PayPalButtons/>: null}
         </>

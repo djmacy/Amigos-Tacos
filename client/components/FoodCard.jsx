@@ -1,21 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState} from 'react';
 import './FoodCard.css';
 import Select from 'react-select';
 
 
-const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSalsaRojo, maxQuantity, price, onPriceChange }) => {
-
-    const form = useRef();
+const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSalsaRojo, maxQuantity, price, onQuantityChange }) => {
     const [priceCalc, setPriceCalc] = useState(0);
-
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        message: '',
-        time: '',
-        quantity: ''
-    });
+    const [quantity, setQuantity] = useState(0);
 
     function createObjectList(number) {
         let objectList = [];
@@ -31,32 +21,26 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
 
     }
 
-    const quantity = createObjectList(maxQuantity);
+    const quantityList = createObjectList(maxQuantity);
 
     const quantityChange = (selectedOption) => {
         if (!selectedOption) {
             setPriceCalc(0); // Reset priceCalc when quantity is not selected
-            onPriceChange(0);
-            // Handle the case when selectedOption is null
-            setFormData((prevData) => ({
-                ...prevData,
-                quantity: '',
-            }));
+            const newQuantity = 0;
+            setQuantity(newQuantity); // Update quantity state to 0 when not selected
+            onQuantityChange(newQuantity); // Pass the new quantity to the parent component
             return;
         }
 
         const { value } = selectedOption;
-        const newPriceCalc = parseInt(value) * price;
-        setPriceCalc(newPriceCalc);
-        onPriceChange(newPriceCalc);
-        setFormData((prevData) => ({
-            ...prevData,
-            quantity: value,
-        }));
+        const newQuantity = parseInt(value);
+        setQuantity(newQuantity);
+        onQuantityChange(newQuantity); // Pass the new quantity to the parent component
 
-        //console.log(priceCalc);
-        // console.log(formData);
+        const newPriceCalc = newQuantity * price;
+        setPriceCalc(newPriceCalc);
     };
+
     return (
         <div className="food-card">
             <h3>{title}</h3>
@@ -93,10 +77,10 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
                 name="quantity"
                 isClearable={true}
                 placeholder="Select Quantity"
-                options={quantity}
+                options={quantityList}
                 className="contact-select"
                 classNamePrefix="select"
-                value={quantity.filter(option => formData.quantity.includes(option.value))}
+                value={quantityList.find(option => option.value === quantity.toString() )}
                 onChange={quantityChange}
             />
             <p>
