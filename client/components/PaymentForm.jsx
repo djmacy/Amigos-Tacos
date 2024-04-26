@@ -142,11 +142,11 @@ export const PaymentForm = ({cart}) => {
           layout: "vertical", //default value. Can be changed to horizontal
         }}
         styles={{ marginTop: "4px", marginBottom: "4px" }}
-        createOrder={createOrderCallback(cart)}
+        createOrder={() => createOrderCallback(cart)}
         onApprove={async (data) => setMessage(await onApproveCallback(data))}
       />
 
-      <PayPalHostedFieldsProvider createOrder={createOrderCallback(cart)}>
+      <PayPalHostedFieldsProvider createOrder={() => createOrderCallback(cart)}>
         <div style={{ marginTop: "4px", marginBottom: "4px" }}>
           <PayPalHostedField
             id="card-number"
