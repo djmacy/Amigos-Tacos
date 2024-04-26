@@ -1,0 +1,16 @@
+.total-price {
+    text-align: center;
+    justify-content: center;
+}
+
+.pay-pal-buttons-home {
+    justify-content: center;
+    text-align: center;
+}
+
+.food-cards-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+   /* text-align: center;*/
+}

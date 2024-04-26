@@ -1,13 +1,16 @@
 import PayPalButtons from "../PayPalButtons.jsx";
 import FoodCard from "../FoodCard.jsx";
 import {useEffect, useState} from "react";
+import "./Home.css";
+import birriaPicture from "../../images/AmigosTacosLogo.png"
 
 const Home = () => {
     const [totalPrice, setTotalPrice] = useState(0); // State to keep track of total price
     const [cart, setCart] = useState([]);
     const [foodCards, setFoodCards] = useState([
-        { title: "Quesabirrias", hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 4, maxQuantity: 3, quantity: 0},
-        { title: "Loko Tacos", hasOnions: true, hasCilantro: true, price: 3, maxQuantity: 4, quantity: 0}
+        { title: "Quesabirrias", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 4, maxQuantity: 3, quantity: 0},
+        { title: "Taco Loko", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 3, maxQuantity: 4, quantity: 0},
+        { title: "Carne Tacos", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 3, maxQuantity: 4, quantity: 0}
     ]);
 
 
@@ -29,24 +32,32 @@ const Home = () => {
     }, [foodCards]);
 
     return (
-        <>
-            {foodCards.map((foodCard, index) => (
-                <FoodCard
-                    key={index}
-                    title={foodCard.title}
-                    hasOnions={foodCard.hasOnions}
-                    hasCilantro={foodCard.hasCilantro}
-                    hasSalsaVerde={foodCard.hasSalsaVerde}
-                    hasSalsaRojo={foodCard.hasSalsaRojo}
-                    price={foodCard.price}
-                    maxQuantity={foodCard.maxQuantity}
-                    quantity={foodCard.quantity}
-                    onQuantityChange={newQuantity => handleQuantityChange(index, newQuantity)}
-                />
-            ))}
-            <p>Total Price: ${totalPrice}</p>
-            {totalPrice > 0 ?  <PayPalButtons cart={cart}/>: null}
-        </>
+        <div>
+            <div className="food-cards-container">
+                {foodCards.map((foodCard, index) => (
+                    <FoodCard
+                        key={index}
+                        title={foodCard.title}
+                        imageUrl={foodCard.imageUrl}
+                        hasOnions={foodCard.hasOnions}
+                        hasCilantro={foodCard.hasCilantro}
+                        hasSalsaVerde={foodCard.hasSalsaVerde}
+                        hasSalsaRojo={foodCard.hasSalsaRojo}
+                        price={foodCard.price}
+                        maxQuantity={foodCard.maxQuantity}
+                        quantity={foodCard.quantity}
+                        onQuantityChange={newQuantity => handleQuantityChange(index, newQuantity)}
+                    />
+                ))}
+
+            </div>
+            <div className="total-price">
+                <p>Total Price: ${totalPrice}</p>
+            </div>
+            <div className="pay-pal-buttons-home">
+                {totalPrice > 0 ? <PayPalButtons cart={cart}/> : null}
+            </div>
+        </div>
     );
 };
 

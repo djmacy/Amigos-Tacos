@@ -45,7 +45,7 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
         <div className="food-card">
             <h3>{title}</h3>
             <img src={imageUrl} alt={title}/>
-            <div>
+            <div className="food-toppings">
                 {hasCilantro && (
                     <label>
                         Cilantro:
@@ -59,7 +59,7 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
                     </label>
                 )}
             </div>
-            <div>
+            <div className="food-toppings">
                 {hasSalsaVerde && (
                     <label>
                         Salsa Verde:
