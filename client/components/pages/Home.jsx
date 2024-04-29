@@ -32,6 +32,7 @@ const Home = () => {
         });
         setTotalPrice(total);
         setCart(newCart);
+        console.log(newCart);
     }, [foodCards]);
 
 
@@ -59,7 +60,6 @@ const Home = () => {
                         onQuantityChange={newQuantity => handleQuantityChange(index, newQuantity)}
                     />
                 ))}
-
             </div>
             <div className="total-price">
                 <p>Total Price: ${totalPrice}</p>
@@ -67,9 +67,7 @@ const Home = () => {
                     Generate Checkout
                 </button>
             </div>
-
             <div className="pay-pal-buttons-home">
-
                 {totalPrice > 0 && paypalButtonTrigger ? <PayPalButtons cart={cart}/> : null}
             </div>
         </div>
