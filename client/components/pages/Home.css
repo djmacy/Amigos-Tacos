@@ -4,8 +4,11 @@
 }
 
 .pay-pal-buttons-home {
+    padding-top: 100px;
+    display: flex;
     justify-content: center;
     text-align: center;
+    align-items: center;
 }
 
 .food-cards-container {

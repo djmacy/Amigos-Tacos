@@ -12,12 +12,15 @@ const Home = () => {
         { title: "Taco Loko", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 3, maxQuantity: 4, quantity: 0},
         { title: "Carne Tacos", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 3, maxQuantity: 4, quantity: 0}
     ]);
+    const [paypalButtonTrigger, setPaypalButtonTrigger] = useState(false);
 
 
     const handleQuantityChange = (index, newQuantity) => {
         const updatedFoodCards = [...foodCards];
         updatedFoodCards[index].quantity = newQuantity;
         setFoodCards(updatedFoodCards);
+        // Set the PayPal button trigger to false to re-render the PayPal buttons
+        setPaypalButtonTrigger(false);
     };
 
     useEffect(() => {
@@ -30,6 +33,13 @@ const Home = () => {
         setTotalPrice(total);
         setCart(newCart);
     }, [foodCards]);
+
+
+    const handlePayPalButtonClick = () => {
+        // Do something when the PayPal button is clicked
+        console.log("PayPal button clicked!");
+        setPaypalButtonTrigger(true);
+    };
 
     return (
         <div>
@@ -53,9 +63,14 @@ const Home = () => {
             </div>
             <div className="total-price">
                 <p>Total Price: ${totalPrice}</p>
+                <button onClick={handlePayPalButtonClick} className="paypal-button">
+                    Generate Checkout
+                </button>
             </div>
+
             <div className="pay-pal-buttons-home">
-                {totalPrice > 0 ? <PayPalButtons cart={cart}/> : null}
+
+                {totalPrice > 0 && paypalButtonTrigger ? <PayPalButtons cart={cart}/> : null}
             </div>
         </div>
     );
