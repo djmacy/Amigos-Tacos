@@ -1,3 +1,6 @@
+const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PORT = 8888 } = process.env;
+const base = "https://api-m.sandbox.paypal.com";
+
 /**
  * Generate an OAuth 2.0 access token for authenticating with PayPal REST APIs.
  * @see https://developer.paypal.com/api/rest/authentication/
@@ -29,7 +32,7 @@ const generateAccessToken = async () => {
  * Generate a client token for rendering the hosted card fields.
  * @see https://developer.paypal.com/docs/checkout/advanced/integrate/#link-integratebackend
  */
-const generateClientToken = async () => {
+export const generateClientToken = async () => {
     const accessToken = await generateAccessToken();
     const url = `${base}/v1/identity/generate-token`;
     const response = await fetch(url, {
@@ -48,7 +51,7 @@ const generateClientToken = async () => {
  * Create an order to start the transaction.
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
  */
-const createOrder = async (cart) => {
+export const createOrder = async (cart) => {
     const prices = {
         "Quesabirrias" : 4,
         "Taco Loko" : 3,
@@ -102,7 +105,7 @@ const createOrder = async (cart) => {
  * Capture payment for the created order to complete the transaction.
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_capture
  */
-const captureOrder = async (orderID) => {
+export const captureOrder = async (orderID) => {
     const accessToken = await generateAccessToken();
     const url = `${base}/v2/checkout/orders/${orderID}/capture`;
 
