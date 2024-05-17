@@ -3,9 +3,9 @@ import "dotenv/config";
 import path from "path";
 
 import { generateClientToken, createOrder, captureOrder } from './services/paypal.js';
+import { getTodaysOrders, insertOrder, getFoodDetails, getOrderDetails } from './services/database.js';
 
-
-const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PORT = 8888 } = process.env;
+const PORT = process.env.PORT || 8888;
 const base = "https://api-m.sandbox.paypal.com";
 const app = express();
 
@@ -14,11 +14,58 @@ app.use(express.static("client/dist"));
 app.use(express.json());
 
 
-
 // serve index.html
 app.get("/", (req, res) => {
   res.sendFile(path.resolve("./client/dist/index.html"));
 });
+
+/**
+ * DB RESTFUL
+ */
+// Example route to use the database functions directly
+app.get("/api/todays-orders", async (req, res) => {
+  try {
+    const orders = await getTodaysOrders();
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/create-order", async (req, res) => {
+  try {
+    const orderDetails = req.body;
+    const orderId = await insertOrder(orderDetails);
+    res.status(201).json({ orderId });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/order-details/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const orderDetails = await getOrderDetails(orderId);
+    res.json(orderDetails);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/order-food-details/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const foodDetails = await getFoodDetails(orderId);
+    res.json(foodDetails);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+/**
+ * PAYPAL RESTFUL
+ */
 
 // return client token for hosted-fields component
 app.post("/api/token", async (req, res) => {
