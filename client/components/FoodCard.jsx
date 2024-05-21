@@ -6,6 +6,7 @@ import Select from 'react-select';
 const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSalsaRojo, maxQuantity, price, onQuantityChange }) => {
     const [priceCalc, setPriceCalc] = useState(0);
     const [quantity, setQuantity] = useState(0);
+    const [sameToppings, setSameToppings] = useState(true);
 
     function createObjectList(number) {
         let objectList = [];
@@ -13,7 +14,7 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
         for (let i = 0; i < number; i++) {
             let obj = {
                 label: labels[i],
-                value: (i+1).toString()
+                value: (i + 1).toString()
             };
             objectList.push(obj);
         }
@@ -32,7 +33,7 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
             return;
         }
 
-        const { value } = selectedOption;
+        const {value} = selectedOption;
         const newQuantity = parseInt(value);
         setQuantity(newQuantity);
         onQuantityChange(newQuantity); // Pass the new quantity to the parent component
@@ -41,38 +42,46 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
         setPriceCalc(newPriceCalc);
     };
 
+    const handleSameToppingsChange = (event) => {
+        setSameToppings(event.target.checked);
+    };
+
     return (
         <div className="food-card">
             <h3>{title}</h3>
             <img src={imageUrl} alt={title}/>
-            <div className="food-toppings">
-                {hasCilantro && (
-                    <label>
-                        Cilantro:
-                        <input type="checkbox" name="cilantro" />
-                    </label>
-                )}
-                {hasOnions && (
-                    <label>
-                        Onions:
-                        <input type="checkbox" name="onions" />
-                    </label>
-                )}
-            </div>
-            <div className="food-toppings">
-                {hasSalsaVerde && (
-                    <label>
-                        Salsa Verde:
-                        <input type="checkbox" name="salsaVerde" />
-                    </label>
-                )}
-                {hasSalsaRojo && (
-                    <label>
-                        Salsa Rojo:
-                        <input type="checkbox" name="salsaRojo" />
-                    </label>
-                )}
-            </div>
+            {(sameToppings) && (
+                <div className="food-toppings">
+                    {hasCilantro && (
+                        <label>
+                            Cilantro:
+                            <input type="checkbox" name="cilantro"/>
+                        </label>
+                    )}
+                    {hasOnions && (
+                        <label>
+                            Onions:
+                            <input type="checkbox" name="onions"/>
+                        </label>
+                    )}
+                </div>
+            )}
+            {(sameToppings) && (
+                <div className="food-toppings">
+                    {hasSalsaVerde && (
+                        <label>
+                            Salsa Verde:
+                            <input type="checkbox" name="salsaVerde"/>
+                        </label>
+                    )}
+                    {hasSalsaRojo && (
+                        <label>
+                            Salsa Rojo:
+                            <input type="checkbox" name="salsaRojo"/>
+                        </label>
+                    )}
+                </div>
+            )}
             <Select
                 name="quantity"
                 isClearable={true}
@@ -80,9 +89,17 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
                 options={quantityList}
                 className="contact-select"
                 classNamePrefix="select"
-                value={quantityList.find(option => option.value === quantity.toString() )}
+                value={quantityList.find(option => option.value === quantity.toString())}
                 onChange={quantityChange}
             />
+            <div className="same-toppings">
+                {quantity > 1 ?
+                    <label>
+                        Same toppings:
+                        <input type="checkbox" name="same-toppings" checked={sameToppings} onChange={handleSameToppingsChange}/>
+                    </label>
+                    : null}
+            </div>
             <p>
                 {priceCalc != 0 ? `Price for ${title.toLowerCase()}: $${priceCalc}` : null}
             </p>

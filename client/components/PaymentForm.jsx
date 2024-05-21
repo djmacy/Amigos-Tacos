@@ -56,8 +56,8 @@ async function onApproveCallback(data, actions) {
     //   (3) Successful transaction -> Show confirmation or thank you message
 
     const transaction =
-      orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
-      orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
+        orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
+        orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
     const errorDetail = orderData?.details?.[0];
 
     // this actions.restart() behavior only applies to the Buttons component
@@ -66,9 +66,9 @@ async function onApproveCallback(data, actions) {
       // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
       return actions.restart();
     } else if (
-      errorDetail ||
-      !transaction ||
-      transaction.status === "DECLINED"
+        errorDetail ||
+        !transaction ||
+        transaction.status === "DECLINED"
     ) {
       // (2) Other non-recoverable errors -> Show a failure message
       let errorMessage;
@@ -79,22 +79,64 @@ async function onApproveCallback(data, actions) {
       } else {
         errorMessage = JSON.stringify(orderData);
       }
-
       throw new Error(errorMessage);
     } else {
       // (3) Successful transaction -> Show confirmation or thank you message
       // Or go to another URL:  actions.redirect('thank_you.html');
-      console.log(
-        "Capture result",
-        orderData,
-        JSON.stringify(orderData, null, 2),
-      );
-      return `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`;
+      //console.log(orderData.status);
+      //console.log(orderData)
+      //console.log(transaction.status);
+      //console.log(transaction);
+      //console.log()
+      // Extract order details from orderData
+      const orderDetails = {
+        isDelivery: "Yes", // or "No" depending on your logic
+        isReady: "No",     // or "Yes" depending on your logic
+        totalPrice: transaction.amount.value, // Assuming totalPrice is here
+        items: [
+        {
+            itemId: 1,           // ID of the item (e.g., quesabirria, carne_taco, loko_taco)
+            quantity: 2,         // Quantity of this item in the order
+            hasCilantro: "Yes",  // Topping details for this item
+            hasOnion: "Yes",
+            hasSalsaVerde: "Yes",
+            hasSalsaRojo: "No"
+        },
+        {
+            itemId: 2,
+            quantity: 1,
+            hasCilantro: "No",
+            hasOnion: "Yes",
+            hasSalsaVerde: "Yes",
+            hasSalsaRojo: "Yes"
+        },
+        // Add more items as needed
+    ]
+      };
+
+      // Send order details to the backend
+      const createOrderResponse = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderDetails)
+      });
+
+      const createOrderData = await createOrderResponse.json();
+      if (!createOrderResponse.ok) {
+        throw new Error(`Order creation failed: ${createOrderData.error}`);
+      }
+
+      console.log(`Order ID: ${createOrderData.orderId}`);
+
+      return `Transaction ${transaction.status}: ${transaction.id}. Order ID: ${createOrderData.orderId}. See console for all available details`;
     }
   } catch (error) {
     return `Sorry, your transaction could not be processed...${error}`;
   }
 }
+
 
 const SubmitPayment = ({ onHandleMessage }) => {
   // Here declare the variable containing the hostedField instance

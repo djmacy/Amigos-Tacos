@@ -20,31 +20,31 @@ export async function getTodaysOrders() {
     }
 }
 
-const orderDetails = {
-    isDelivery: "Yes", // or "No"
-    isReady: "No",     // or "Yes"
-    totalPrice: 24.95, // Total price of the order
-
-    items: [
-        {
-            itemId: 1,           // ID of the item (e.g., quesabirria, carne_taco, loko_taco)
-            quantity: 2,         // Quantity of this item in the order
-            hasCilantro: "Yes",  // Topping details for this item
-            hasOnion: "Yes",
-            hasSalsaVerde: "Yes",
-            hasSalsaRojo: "No"
-        },
-        {
-            itemId: 2,
-            quantity: 1,
-            hasCilantro: "No",
-            hasOnion: "Yes",
-            hasSalsaVerde: "Yes",
-            hasSalsaRojo: "Yes"
-        },
-        // Add more items as needed
-    ]
-};
+// const orderDetails = {
+//     isDelivery: "Yes", // or "No"
+//     isReady: "No",     // or "Yes"
+//     totalPrice: 24.95, // Total price of the order
+//
+//     items: [
+//         {
+//             itemId: 1,           // ID of the item (e.g., quesabirria, carne_taco, loko_taco)
+//             quantity: 2,         // Quantity of this item in the order
+//             hasCilantro: "Yes",  // Topping details for this item
+//             hasOnion: "Yes",
+//             hasSalsaVerde: "Yes",
+//             hasSalsaRojo: "No"
+//         },
+//         {
+//             itemId: 2,
+//             quantity: 1,
+//             hasCilantro: "No",
+//             hasOnion: "Yes",
+//             hasSalsaVerde: "Yes",
+//             hasSalsaRojo: "Yes"
+//         },
+//         // Add more items as needed
+//     ]
+// };
 
 export async function insertOrder(orderDetails) {
     // Insert into orders table

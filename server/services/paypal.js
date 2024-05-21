@@ -64,11 +64,11 @@ export const createOrder = async (cart) => {
         totalPrice += price * quantity;
     });
 
-    // use the cart information passed from the front-end to calculate the purchase unit details
+   /* // use the cart information passed from the front-end to calculate the purchase unit details
     console.log(
         "shopping cart information passed from the frontend createOrder() callback:",
         cart, totalPrice.toFixed(2).toString(),
-    );
+    );*/
 
     const accessToken = await generateAccessToken();
     const url = `${base}/v2/checkout/orders`;
