@@ -1,12 +1,13 @@
 import PayPalButtons from "../PayPalButtons.jsx";
 import FoodCard from "../FoodCard.jsx";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./Home.css";
 import birriaPicture from "../../images/AmigosTacosLogo.png"
 
 const Home = () => {
     const [totalPrice, setTotalPrice] = useState(0); // State to keep track of total price
     const [cart, setCart] = useState([]);
+    const [isDelivery, setDelivery] = useState(false)
     const [foodCards, setFoodCards] = useState([
         { title: "Quesabirrias", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 4, maxQuantity: 3, quantity: 0},
         { title: "Taco Loko", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, hasSalsaVerde: true, hasSalsaRojo: true, price: 3, maxQuantity: 4, quantity: 0},
@@ -36,6 +37,15 @@ const Home = () => {
     }, [foodCards]);
 
 
+        const handleDeliveryChange = (event) => {
+            setDelivery(prevState => {
+                const newDeliveryState = event.target.checked;
+                setTotalPrice(prevTotalPrice => prevTotalPrice + (newDeliveryState ? 5 : -5));
+                return newDeliveryState;
+            });
+        };
+
+
     const handlePayPalButtonClick = () => {
         // Do something when the PayPal button is clicked
         console.log("PayPal button clicked!");
@@ -62,6 +72,12 @@ const Home = () => {
                 ))}
             </div>
             <div className="total-price">
+                {(totalPrice > 0) &&
+                    <label>
+                    Deliver My Food:
+                    <input type="checkbox" name="delivery" checked={isDelivery} onChange={handleDeliveryChange}/>
+                </label>
+                }
                 <p>Total Price: ${totalPrice}</p>
                 <button onClick={handlePayPalButtonClick} className="paypal-button">
                     Generate Checkout

@@ -7,7 +7,10 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
     const [priceCalc, setPriceCalc] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const [sameToppings, setSameToppings] = useState(true);
-
+    const [cilantro, setCilantro] = useState(true);
+    const [onions, setOnions] = useState(true);
+    const [salsaVerde, setSalsaVerde] = useState(true);
+    const [salsaRojo, setSalsaRojo] = useState(true);
     function createObjectList(number) {
         let objectList = [];
         const labels = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"];
@@ -46,41 +49,97 @@ const FoodCard = ({title, imageUrl, hasCilantro, hasOnions, hasSalsaVerde, hasSa
         setSameToppings(event.target.checked);
     };
 
+    const handleCilantroChange = (event) => {
+        setCilantro(event.target.checked);
+    }
+
+    const handleOnionsChange = (event) => {
+        setOnions(event.target.checked);
+    }
+
+    const handleSalsaVerdeChange = (event) => {
+        setSalsaVerde(event.target.checked);
+    }
+
+    const handleSalsaRojoChange = (event) => {
+        setSalsaRojo(event.target.checked);
+    }
+
+    const renderToppings = (index) => (
+        <div key={index}>
+            <div className="food-toppings">
+                {hasCilantro && (
+                    <label>
+                        Cilantro:
+                        <input type="checkbox" name={`cilantro-${index}`} />
+                    </label>
+                )}
+                {hasOnions && (
+                    <label>
+                        Onions:
+                        <input type="checkbox" name={`onions-${index}`} />
+                    </label>
+                )}
+            </div>
+            <div className="food-toppings">
+                {hasSalsaVerde && (
+                    <label>
+                        Salsa Verde:
+                        <input type="checkbox" name={`salsaVerde-${index}`} />
+                    </label>
+                )}
+                {hasSalsaRojo && (
+                    <label>
+                        Salsa Rojo:
+                        <input type="checkbox" name={`salsaRojo-${index}`} />
+                    </label>
+                )}
+            </div>
+            {index < quantity - 1 && <hr />}
+        </div>
+    );
+
     return (
         <div className="food-card">
             <h3>{title}</h3>
             <img src={imageUrl} alt={title}/>
-            {(sameToppings) && (
+            { (sameToppings && quantity != 0) && (
+            <div>
+
                 <div className="food-toppings">
                     {hasCilantro && (
                         <label>
                             Cilantro:
-                            <input type="checkbox" name="cilantro"/>
+                            <input type="checkbox" name="cilantro" checked={cilantro} onChange={handleCilantroChange}/>
                         </label>
                     )}
                     {hasOnions && (
                         <label>
                             Onions:
-                            <input type="checkbox" name="onions"/>
+                            <input type="checkbox" name="onions" checked={onions} onChange={handleOnionsChange}/>
                         </label>
                     )}
                 </div>
-            )}
-            {(sameToppings) && (
                 <div className="food-toppings">
                     {hasSalsaVerde && (
                         <label>
                             Salsa Verde:
-                            <input type="checkbox" name="salsaVerde"/>
+                            <input type="checkbox" name="salsaVerde" checked={salsaVerde} onChange={handleSalsaVerdeChange}/>
                         </label>
                     )}
                     {hasSalsaRojo && (
                         <label>
                             Salsa Rojo:
-                            <input type="checkbox" name="salsaRojo"/>
+                            <input type="checkbox" name="salsaRojo" checked={salsaRojo} onChange={handleSalsaRojoChange}/>
                         </label>
                     )}
                 </div>
+            </div>
+            )}
+            {(!sameToppings && quantity > 1) && (
+                <>
+                    {Array.from({ length: quantity }).map((_, index) => renderToppings(index))}
+                </>
             )}
             <Select
                 name="quantity"
