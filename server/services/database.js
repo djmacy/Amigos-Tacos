@@ -20,55 +20,43 @@ export async function getTodaysOrders() {
     }
 }
 
-// const orderDetails = {
-//     isDelivery: "Yes", // or "No"
-//     isReady: "No",     // or "Yes"
-//     totalPrice: 24.95, // Total price of the order
-//
-//     items: [
-//         {
-//             itemId: 1,           // ID of the item (e.g., quesabirria, carne_taco, loko_taco)
-//             quantity: 2,         // Quantity of this item in the order
-//             hasCilantro: "Yes",  // Topping details for this item
-//             hasOnion: "Yes",
-//             hasSalsaVerde: "Yes",
-//             hasSalsaRojo: "No"
-//         },
-//         {
-//             itemId: 2,
-//             quantity: 1,
-//             hasCilantro: "No",
-//             hasOnion: "Yes",
-//             hasSalsaVerde: "Yes",
-//             hasSalsaRojo: "Yes"
-//         },
-//         // Add more items as needed
-//     ]
-// };
-
 export async function insertOrder(orderDetails) {
-    // Insert into orders table
-    const [result] = await pool.query(
-        "INSERT INTO orders (is_delivery, is_ready, total_price) VALUES (?, ?, ?)",
-        [orderDetails.isDelivery, orderDetails.isReady, orderDetails.totalPrice]
-    );
-    const orderId = result.insertId; // Get the order_id of the newly inserted order
-    // Insert into order_item table for each item in the order
-    for (const item of orderDetails.items) {
-        // Insert topping details for the item into the topping table
-        const [toppingResult] = await pool.query(
-            "INSERT INTO topping ( has_cilantro, has_onion, has_salsa_verde, has_salsa_rojo) VALUES ( ?, ?, ?, ?)",
-            [item.hasCilantro, item.hasOnion, item.hasSalsaVerde, item.hasSalsaRojo]
-        );
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
 
-        const toppingId = toppingResult.insertId; // Get the item_id of the newly inserted item
-        // Insert item into order_item table
-        await pool.query(
-            "INSERT INTO order_item (order_id, item_id, quantity, topping_id) VALUES (?, ?, ?, ?)",
-            [orderId, item.itemId, item.quantity, toppingId]
+        // Insert into orders table
+        const [result] = await connection.query(
+            "INSERT INTO orders (is_delivery, is_ready, has_salsa_verde, has_salsa_rojo, mexican_cokes, total_price) VALUES (?, ?, ?, ?, ?, ?)",
+            [orderDetails.isDelivery, orderDetails.isReady, orderDetails.hasSalsaVerde, orderDetails.hasSalsaRojo, orderDetails.mexicanCokes, orderDetails.totalPrice]
         );
+        const orderId = result.insertId; // Get the order_id of the newly inserted order
+
+        // Insert into order_item table for each item in the order
+        for (const item of orderDetails.items) {
+            // Insert topping details for the item into the topping table
+            const [toppingResult] = await connection.query(
+                "INSERT INTO toppings (has_cilantro, has_onion, meat) VALUES (?, ?, ?)",
+                [item.hasCilantro, item.hasOnion, item.meat]
+            );
+            const toppingId = toppingResult.insertId; // Get the topping_id of the newly inserted topping
+
+            // Insert item into order_item table
+            await connection.query(
+                "INSERT INTO order_items (order_id, item_id, topping_id, quantity) VALUES (?, ?, ?, ?)",
+                [orderId, item.itemId, toppingId, item.quantity]
+            );
+        }
+
+        await connection.commit();
+        return orderId; // Return the order_id for reference
+    } catch (error) {
+        await connection.rollback();
+        console.error("Error inserting order:", error);
+        throw error;
+    } finally {
+        connection.release();
     }
-    return orderId; // Return the order_id for reference
 }
 
 export async function getFoodDetails(orderId) {
@@ -81,14 +69,13 @@ export async function getFoodDetails(orderId) {
                 oi.quantity AS quantity,
                 t.has_cilantro AS has_cilantro,
                 t.has_onion AS has_onion,
-                t.has_salsa_verde AS has_salsa_verde,
-                t.has_salsa_rojo AS has_salsa_rojo
+                t.meat AS meat
             FROM 
-                order_item oi
+                order_items oi
             JOIN 
-                item i ON oi.item_id = i.id
+                items i ON oi.item_id = i.id
             JOIN 
-                topping t ON oi.topping_id = t.id
+                toppings t ON oi.topping_id = t.id
             WHERE 
                 oi.order_id = ?
         `, [orderId]);
@@ -101,6 +88,7 @@ export async function getFoodDetails(orderId) {
     }
 }
 
+
 export async function getOrderDetails(orderId) {
     try {
         // Execute the SQL query to retrieve order details
@@ -110,7 +98,10 @@ export async function getOrderDetails(orderId) {
                 is_delivery,
                 is_ready,
                 total_price,
-                time_ordered
+                time_ordered,
+                mexican_cokes,
+                has_salsa_verde,
+                has_salsa_rojo
             FROM 
                 orders
             WHERE 
@@ -129,7 +120,62 @@ export async function getOrderDetails(orderId) {
         throw error;
     }
 }
+/*
+// Example usage to get the food details for a specific order ID
+getFoodDetails(1).then(foodDetails => {
+    console.log('Food Details:', foodDetails);
+}).catch(error => {
+    console.error('Error:', error);
+});
+*/
+ */
+/*
+getOrderDetails(1).then(orderDetails => {
+    console.log('Order Details:', orderDetails);
+}).catch(error => {
+    console.error('Error:', error);
+});
+*/
+/*
+const orderDetails = {
+    isDelivery: 'Yes',
+    isReady: 'No',
+    hasSalsaVerde: 'Yes',
+    hasSalsaRojo: 'No',
+    mexicanCokes: 2,
+    totalPrice: 24.95,
+    items: [
+        {
+            itemId: 1, // Quesabirria
+            quantity: 1,
+            hasCilantro: 'Yes',
+            hasOnion: 'Yes',
+            meat: 'birria'
+        },
+        {
+            itemId: 1, // Quesabirria with cheese
+            quantity: 1,
+            hasCilantro: 'Yes',
+            hasOnion: 'Yes',
+            meat: 'birria with cheese'
+        },
+        {
+            itemId: 3, // Loko Taco
+            quantity: 1,
+            hasCilantro: 'No',
+            hasOnion: 'Yes',
+            meat: 'carne asada'
+        }
+    ]
+};
 
+insertOrder(orderDetails).then(orderId => {
+    console.log(`Order inserted with ID: ${orderId}`);
+}).catch(error => {
+    console.error("Error inserting order:", error);
+});
+
+*/
 //const orders = await getOrders();
 //const insertOrders = await insertOrder(orderDetails);
 //const getOrderItems = await getOrderDetails(6);
