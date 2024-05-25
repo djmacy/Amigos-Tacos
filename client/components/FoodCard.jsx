@@ -1,14 +1,35 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './FoodCard.css';
 import Select from 'react-select';
 
-const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSameToppings, maxQuantity, price, onQuantityChange, onOnionsChange, onCilantroChange, onMeatChoiceChange, cardIndex }) => {
+const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSameToppings, maxQuantity, price, onQuantityChange, onOnionsChange, onCilantroChange, onMeatChoiceChange, onSameToppingsChange, cardIndex }) => {
     const [priceCalc, setPriceCalc] = useState(0);
     const [quantity, setQuantity] = useState(0);
-    const [sameToppings, setSameToppings] = useState(true);
-    const [cilantro, setCilantro] = useState(hasCilantro);
-    const [onions, setOnions] = useState(hasOnions);
-    const [meatSelections, setMeatSelections] = useState(Array(maxQuantity).fill('birria'));
+    const [sameToppings, setSameToppings] = useState(hasSameToppings);
+    const [meatSelections, setMeatSelections] = useState(Array(maxQuantity).fill(meatChoice));
+    const [cilantro, setCilantro] = useState(Array(maxQuantity).fill(hasCilantro));
+    const [onions, setOnions] = useState(Array(maxQuantity). fill(hasOnions));
+
+    useEffect(() => {
+        // Ensure topping handlers are called whenever quantity changes
+        if (quantity > 0) {
+            if (hasSameToppings) {
+                handleCilantroChange(0, { target: { checked: cilantro[0] } });
+                handleOnionsChange(0, { target: { checked: onions[0] } });
+                handleMeatChange(0, { target:  {
+                    value:meatSelections[0],
+                    checked: meatSelections[0] === meatSelections[0]
+                }});
+            } else {
+                handleCilantroChange(quantity, {target: { checked:onions[quantity] }});
+                handleOnionsChange(quantity, {target: { checked:cilantro[quantity]}});
+                handleMeatChange(quantity, {target: {
+                    value: meatSelections[quantity],
+                    checked: meatSelections[quantity] === meatSelections[quantity]
+                }});
+            }
+        }
+    }, [quantity, sameToppings]);
 
     function createObjectList(number) {
         let objectList = [];
@@ -41,30 +62,62 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
 
         const newPriceCalc = newQuantity * price;
         setPriceCalc(newPriceCalc);
+
     };
 
     const handleSameToppingsChange = (event) => {
-        setSameToppings(event.target.checked);
-        hasSameToppings = sameToppings;
+        const newValue = event.target.checked
+        setSameToppings(newValue);
+        onSameToppingsChange(newValue);
+
     };
 
-    const handleCilantroChange = (event) => {
-        const newValue = event.target.checked;
-        setCilantro(newValue);
-        onCilantroChange(newValue);
+    const handleCilantroChange = (index, event) => {
+        const newCilantro = [...cilantro];
+        newCilantro[index] = event.target.checked;
+        setCilantro(newCilantro);
+        if (hasSameToppings) {
+            onCilantroChange(newCilantro[0])
+        } else {
+            let cilantroArray = [];
+            for (let i = 0; i < quantity; i++) {
+                cilantroArray.push(newCilantro[i])
+            }
+            onCilantroChange(cilantroArray);
+        }
     }
 
-    const handleOnionsChange = (event) => {
-        const newValue = event.target.checked;
-        setOnions(newValue);
-        onOnionsChange(newValue);
+
+
+    const handleOnionsChange = (index, event) => {
+        const newOnions = [...onions];
+        newOnions[index] = event.target.checked;
+        setOnions(newOnions);
+        if (hasSameToppings) {
+            onOnionsChange(newOnions[0])
+        } else {
+            let onionsArray = []
+            for (let i = 0; i < quantity; i++) {
+                onionsArray.push(newOnions[i]);
+            }
+            onOnionsChange(onionsArray);
+        }
     };
 
     const handleMeatChange = (index, event) => {
         const newMeatSelections = [...meatSelections];
         newMeatSelections[index] = event.target.value;
         setMeatSelections(newMeatSelections);
-        onMeatChoiceChange(newMeatSelections[0]);
+        if (hasSameToppings) {
+            onMeatChoiceChange(newMeatSelections[0]);
+        } else {
+            let meatArray = [];
+            for (let i = 0; i < quantity; i++) {
+                meatArray.push(newMeatSelections[i]);
+            }
+            onMeatChoiceChange(meatArray);
+        }
+        //console.log(newMeatSelections)
     };
 
     const renderToppings = (index) => (
@@ -72,11 +125,11 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
             <div className="food-toppings">
                     <label>
                         Cilantro:
-                        <input type="checkbox" name={`cilantro-${cardIndex}-${index}`} />
+                        <input type="checkbox" name={`cilantro-${cardIndex}-${index}`} checked={cilantro[index]} onChange={(event) => handleCilantroChange(index, event)}/>
                     </label>
                     <label>
                         Onions:
-                        <input type="checkbox" name={`onions-${cardIndex}-${index}`} />
+                        <input type="checkbox" name={`onions-${cardIndex}-${index}`} checked={onions[index]} onChange={(event) => handleOnionsChange(index, event)} />
                     </label>
             </div>
             <div className="food-toppings">
@@ -125,11 +178,11 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                     <div className="food-toppings">
                             <label>
                                 Cilantro:
-                                <input type="checkbox" name={`cilantro-${cardIndex}`} checked={cilantro} onChange={handleCilantroChange} />
+                                <input type="checkbox" name={`cilantro-${cardIndex}`} checked={cilantro[0]} onChange={(event) => handleCilantroChange(0, event)} />
                             </label>
                             <label>
                                 Onions:
-                                <input type="checkbox" name={`onions-${cardIndex}`} checked={onions} onChange={handleOnionsChange} />
+                                <input type="checkbox" name={`onions-${cardIndex}`} checked={onions[0]} onChange={(event) => handleOnionsChange(0, event)} />
                             </label>
                     </div>
                     <div className="food-toppings">

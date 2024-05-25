@@ -3,6 +3,7 @@ import FoodCard from "../FoodCard.jsx";
 import React, { useEffect, useState } from "react";
 import "./Home.css";
 import birriaPicture from "../../images/AmigosTacosLogo.png";
+import foodCard from "../FoodCard.jsx";
 
 const Home = () => {
     const [totalPrice, setTotalPrice] = useState(0);
@@ -29,32 +30,41 @@ const Home = () => {
     }
 
     function generateCart() {
-        const items = foodCards.map((foodCard, index) => {
+        const items = foodCards.filter(foodCard => foodCard.quantity > 0).flatMap((foodCard, index) => {
+            let itemId;
+            switch (foodCard.title) {
+                case 'Quesabirrias':
+                    itemId = 1;
+                    break;
+                case 'Carne Asada Taco':
+                    itemId = 2;
+                    break;
+                case "Loko Taco":
+                    itemId = 3;
+                    break;
+                default:
+                    itemId = '';
+            }
+
             if (foodCard.hasSameToppings) {
-                let itemId;
-                switch (foodCard.title) {
-                    case 'Quesabirrias':
-                        itemId = 1;
-                        break;
-                    case 'Carne Asada Taco':
-                        itemId = 2;
-                        break;
-                    case "Loko Taco":
-                        itemId = 3;
-                        break;
-                    default:
-                        itemId = '';
-                }
                 return {
                     itemId: itemId,
                     quantity: foodCard.quantity,
                     hasCilantro: foodCard.hasCilantro ? 'Yes' : 'No',
                     hasOnion: foodCard.hasOnions ? 'Yes' : 'No',
                     meat: foodCard.meatChoice
-                }
+                };
+            } else {
+                return Array.from({ length: foodCard.quantity }).map(() => ({
+                    itemId: itemId,
+                    quantity: 1,
+                    hasCilantro: foodCard.hasCilantro ? 'Yes' : 'No',
+                    hasOnion: foodCard.hasOnions ? 'Yes' : 'No',
+                    meat: foodCard.meatChoice
+                }));
             }
-
         });
+
         const orderDetails = {
             isDelivery: isDelivery ? 'Yes' : 'No',
             isReady: 'No',
@@ -64,9 +74,11 @@ const Home = () => {
             totalPrice: totalPrice.toFixed(2),
             items: items
         };
-        console.log(orderDetails)
+
+        console.log(orderDetails);
         return orderDetails;
     }
+
 
     const handleQuantityChange = (index, newQuantity) => {
         const updatedFoodCards = [...foodCards];
@@ -74,8 +86,6 @@ const Home = () => {
         setFoodCards(updatedFoodCards);
         setPaypalButtonTrigger(false);
     };
-
-
 
     useEffect(() => {
         let total = 0;
@@ -98,17 +108,27 @@ const Home = () => {
         setFoodCards(updatedFoodCards);
     };
 
+
     const handleCilantroChange = (index, hasCilantro) => {
         const updatedFoodCards = [...foodCards];
         updatedFoodCards[index].hasCilantro = hasCilantro;
         setFoodCards(updatedFoodCards);
     }
 
+
+
     const handleMeatChoiceChange = (index, newMeatChoice) => {
         const updatedFoodCards = [...foodCards];
         updatedFoodCards[index].meatChoice = newMeatChoice;
         setFoodCards(updatedFoodCards);
+        console.log(updatedFoodCards)
     };
+
+    const handleSameToppingsChange = (index, hasSameToppings) => {
+        const updatedFoodCards = [...foodCards];
+        updatedFoodCards[index].hasSameToppings = hasSameToppings;
+        setFoodCards(updatedFoodCards)
+    }
 
     const handleDeliveryChange = (event) => {
         setDelivery(prevState => {
@@ -155,6 +175,8 @@ const Home = () => {
                         onCilantroChange={(newHasCilantro) => handleCilantroChange(index, newHasCilantro)}
                         meatChoice={foodCard.meatChoice}
                         onMeatChoiceChange={(newMeatChoice) => handleMeatChoiceChange(index, newMeatChoice)}
+                        hasSameToppings={foodCard.hasSameToppings}
+                        onSameToppingsChange={(newHasToppings) => handleSameToppingsChange(index, newHasToppings)}
                         price={foodCard.price}
                         maxQuantity={foodCard.maxQuantity}
                         quantity={foodCard.quantity}
@@ -166,7 +188,6 @@ const Home = () => {
             <div className="total-price">
                 {(totalPrice > 0 && !containsItems()) && (
                     <>
-
                         <label>
                             Salsa Verde:
                             <input type="checkbox" name="salsaVerde" checked={salsaVerde} onChange={handleSalsaVerdeChange}/>
