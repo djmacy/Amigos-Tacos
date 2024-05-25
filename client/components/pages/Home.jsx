@@ -55,13 +55,29 @@ const Home = () => {
                     meat: foodCard.meatChoice
                 };
             } else {
-                return Array.from({ length: foodCard.quantity }).map(() => ({
+                let itemList = [];
+                for (let i = 0; i < foodCard.quantity; i++) {
+                    itemList.push(
+                        {
+                            itemId: itemId,
+                            quantity: 1,
+                            hasCilantro: foodCard.hasCilantro[i] ? 'Yes' : 'No',
+                            hasOnion: foodCard.hasOnions[i] ? 'Yes' : 'No',
+                            meat: foodCard.meatChoice[i]
+                        }
+                    );
+                }
+
+                return itemList
+
+
+                /*Array.from({ length: foodCard.quantity }).map(() => ({
                     itemId: itemId,
                     quantity: 1,
                     hasCilantro: foodCard.hasCilantro ? 'Yes' : 'No',
                     hasOnion: foodCard.hasOnions ? 'Yes' : 'No',
                     meat: foodCard.meatChoice
-                }));
+                }));*/
             }
         });
 
