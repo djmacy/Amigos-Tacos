@@ -3,6 +3,7 @@ import { PaymentForm } from "./PaymentForm.jsx";
 import { useState, useEffect } from "react";
 
 const PayPalButtons = ({cart}) => {
+   // console.log(cart);
     const [clientToken, setClientToken] = useState(null);
 
     const initialOptions = {

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './FoodCard.css';
 import Select from 'react-select';
 
-const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, maxQuantity, price, onQuantityChange, cardIndex }) => {
+const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSameToppings, maxQuantity, price, onQuantityChange, onOnionsChange, onCilantroChange, onMeatChoiceChange, cardIndex }) => {
     const [priceCalc, setPriceCalc] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const [sameToppings, setSameToppings] = useState(true);
-    const [cilantro, setCilantro] = useState(true);
-    const [onions, setOnions] = useState(true);
+    const [cilantro, setCilantro] = useState(hasCilantro);
+    const [onions, setOnions] = useState(hasOnions);
     const [meatSelections, setMeatSelections] = useState(Array(maxQuantity).fill('birria'));
 
     function createObjectList(number) {
@@ -45,37 +45,39 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, maxQuantity, price,
 
     const handleSameToppingsChange = (event) => {
         setSameToppings(event.target.checked);
+        hasSameToppings = sameToppings;
     };
 
     const handleCilantroChange = (event) => {
-        setCilantro(event.target.checked);
+        const newValue = event.target.checked;
+        setCilantro(newValue);
+        onCilantroChange(newValue);
     }
 
     const handleOnionsChange = (event) => {
-        setOnions(event.target.checked);
-    }
+        const newValue = event.target.checked;
+        setOnions(newValue);
+        onOnionsChange(newValue);
+    };
 
     const handleMeatChange = (index, event) => {
         const newMeatSelections = [...meatSelections];
         newMeatSelections[index] = event.target.value;
         setMeatSelections(newMeatSelections);
+        onMeatChoiceChange(newMeatSelections[0]);
     };
 
     const renderToppings = (index) => (
         <div key={index}>
             <div className="food-toppings">
-                {hasCilantro && (
                     <label>
                         Cilantro:
                         <input type="checkbox" name={`cilantro-${cardIndex}-${index}`} />
                     </label>
-                )}
-                {hasOnions && (
                     <label>
                         Onions:
                         <input type="checkbox" name={`onions-${cardIndex}-${index}`} />
                     </label>
-                )}
             </div>
             <div className="food-toppings">
                 <label>Meat:</label>
@@ -121,18 +123,14 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, maxQuantity, price,
             {sameToppings && quantity !== 0 && (
                 <div>
                     <div className="food-toppings">
-                        {hasCilantro && (
                             <label>
                                 Cilantro:
                                 <input type="checkbox" name={`cilantro-${cardIndex}`} checked={cilantro} onChange={handleCilantroChange} />
                             </label>
-                        )}
-                        {hasOnions && (
                             <label>
                                 Onions:
                                 <input type="checkbox" name={`onions-${cardIndex}`} checked={onions} onChange={handleOnionsChange} />
                             </label>
-                        )}
                     </div>
                     <div className="food-toppings">
                         <label>Meat:</label>

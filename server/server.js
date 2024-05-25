@@ -34,8 +34,8 @@ app.get("/api/todays-orders", async (req, res) => {
 
 app.post("/api/create-order", async (req, res) => {
   try {
-    const orderDetails = req.body;
-    const orderId = await insertOrder(orderDetails);
+    const { orderDetails } = req.body;
+    const { orderId } = await insertOrder(orderDetails);
     res.status(201).json({ orderId });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -51,6 +51,8 @@ app.get("/api/order-details/:orderId", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
 
 app.get("/api/order-food-details/:orderId", async (req, res) => {
   try {

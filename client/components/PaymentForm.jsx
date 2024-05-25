@@ -8,6 +8,8 @@ import {
   usePayPalHostedFields,
 } from "@paypal/react-paypal-js";
 //**********Cart must be a list of objects
+
+const approvedCart = {};
 async function createOrderCallback(cart) {
   try {
     const response = await fetch("/api/orders", {
@@ -21,6 +23,7 @@ async function createOrderCallback(cart) {
         cart: cart,
       }),
     });
+    //console.log(cart);
 
     const orderData = await response.json();
 
@@ -40,7 +43,8 @@ async function createOrderCallback(cart) {
   }
 }
 
-async function onApproveCallback(data, actions) {
+async function onApproveCallback(data, actions, cart) {
+  console.log("onApproveCallback cart:", cart); // Add this line for debugging
   try {
     const response = await fetch(`/api/orders/${data.orderID}/capture`, {
       method: "POST",
@@ -89,30 +93,38 @@ async function onApproveCallback(data, actions) {
       //console.log(transaction);
       //console.log()
       // Extract order details from orderData
-      const orderDetails = {
-        isDelivery: "Yes", // or "No" depending on your logic
-        isReady: "No",     // or "Yes" depending on your logic
-        totalPrice: transaction.amount.value, // Assuming totalPrice is here
+
+    /*  const orderDetails = {
+        isDelivery: 'Yes',
+        isReady: 'No',
+        hasSalsaVerde: 'Yes',
+        hasSalsaRojo: 'No',
+        mexicanCokes: 2,
+        totalPrice: 24.95,
         items: [
-        {
-            itemId: 1,           // ID of the item (e.g., quesabirria, carne_taco, loko_taco)
-            quantity: 2,         // Quantity of this item in the order
-            hasCilantro: "Yes",  // Topping details for this item
-            hasOnion: "Yes",
-            hasSalsaVerde: "Yes",
-            hasSalsaRojo: "No"
-        },
-        {
-            itemId: 2,
+          {
+            itemId: 1, // Quesabirria
             quantity: 1,
-            hasCilantro: "No",
-            hasOnion: "Yes",
-            hasSalsaVerde: "Yes",
-            hasSalsaRojo: "Yes"
-        },
-        // Add more items as needed
-    ]
-      };
+            hasCilantro: 'Yes',
+            hasOnion: 'Yes',
+            meat: 'birria'
+          },
+          {
+            itemId: 1, // Quesabirria with cheese
+            quantity: 1,
+            hasCilantro: 'Yes',
+            hasOnion: 'Yes',
+            meat: 'birria with cheese'
+          },
+          {
+            itemId: 3, // Loko Taco
+            quantity: 1,
+            hasCilantro: 'No',
+            hasOnion: 'Yes',
+            meat: 'carne asada'
+          }
+        ]
+      };*/
 
       // Send order details to the backend
       const createOrderResponse = await fetch('/api/create-order', {
@@ -120,8 +132,10 @@ async function onApproveCallback(data, actions) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(orderDetails)
+        body: JSON.stringify({ orderDetails: cart} ),
       });
+      console.log("From Payment" + cart);
+      //console.log(orderDetails);
 
       const createOrderData = await createOrderResponse.json();
       if (!createOrderResponse.ok) {
@@ -138,7 +152,7 @@ async function onApproveCallback(data, actions) {
 }
 
 
-const SubmitPayment = ({ onHandleMessage }) => {
+const SubmitPayment = ({ onHandleMessage, cart }) => {
   // Here declare the variable containing the hostedField instance
   const { cardFields } = usePayPalHostedFields();
   const cardHolderName = useRef(null);
@@ -152,7 +166,7 @@ const SubmitPayment = ({ onHandleMessage }) => {
         // These fields are optional for Sandbox but mandatory for production integration
         cardholderName: cardHolderName?.current?.value,
       })
-      .then(async (data) => onHandleMessage(await onApproveCallback(data)))
+      .then(async (data) => onHandleMessage(await onApproveCallback(data, undefined, cart)))
       .catch((orderData) => {
         onHandleMessage(
           `Sorry, your transaction could not be processed...${JSON.stringify(
@@ -173,71 +187,76 @@ const Message = ({ content }) => {
   return <p>{content}</p>;
 };
 
-export const PaymentForm = ({cart}) => {
+export const PaymentForm = ({ cart }) => {
   const [message, setMessage] = useState("");
+
+  const handleApprove = async (data) => {
+    console.log("handleApprove cart:", cart); // Add this line for debugging
+    const resultMessage = await onApproveCallback(data, undefined, cart);
+    setMessage(resultMessage);
+  };
+
   return (
-    <div className={styles.form}>
-      <PayPalButtons
-        style={{
-          shape: "rect",
-          //color:'blue' change the default color of the buttons
-          layout: "vertical", //default value. Can be changed to horizontal
-        }}
-        styles={{ marginTop: "4px", marginBottom: "4px" }}
-        createOrder={() => createOrderCallback(cart)}
-        onApprove={async (data) => setMessage(await onApproveCallback(data))}
-      />
-
-      <PayPalHostedFieldsProvider createOrder={() => createOrderCallback(cart)}>
-        <div style={{ marginTop: "4px", marginBottom: "4px" }}>
-          <PayPalHostedField
-            id="card-number"
-            hostedFieldType="number"
-            options={{
-              selector: "#card-number",
-              placeholder: "Card Number",
+      <div className={styles.form}>
+        <PayPalButtons
+            style={{
+              shape: "rect",
+              layout: "vertical",
             }}
-            className={styles.input}
-          />
-          <div className={styles.container}>
-            <PayPalHostedField
-              id="expiration-date"
-              hostedFieldType="expirationDate"
-              options={{
-                selector: "#expiration-date",
-                placeholder: "Expiration Date",
-              }}
-              className={styles.input}
-            />
-            <PayPalHostedField
-              id="cvv"
-              hostedFieldType="cvv"
-              options={{
-                selector: "#cvv",
-                placeholder: "CVV",
-              }}
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.container}>
-            <input
-              id="card-holder"
-              type="text"
-              placeholder="Name on Card"
-              className={styles.input}
-            />
+            styles={{ marginTop: "4px", marginBottom: "4px" }}
+            createOrder={() => createOrderCallback(cart)}
+            onApprove={handleApprove}
+        />
 
-            <input
-              id="card-billing-address-country"
-              type="text"
-              placeholder="Country Code"
-              className={styles.input}
+        <PayPalHostedFieldsProvider createOrder={() => createOrderCallback(cart)}>
+          <div style={{ marginTop: "4px", marginBottom: "4px" }}>
+            <PayPalHostedField
+                id="card-number"
+                hostedFieldType="number"
+                options={{
+                  selector: "#card-number",
+                  placeholder: "Card Number",
+                }}
+                className={styles.input}
             />
+            <div className={styles.container}>
+              <PayPalHostedField
+                  id="expiration-date"
+                  hostedFieldType="expirationDate"
+                  options={{
+                    selector: "#expiration-date",
+                    placeholder: "Expiration Date",
+                  }}
+                  className={styles.input}
+              />
+              <PayPalHostedField
+                  id="cvv"
+                  hostedFieldType="cvv"
+                  options={{
+                    selector: "#cvv",
+                    placeholder: "CVV",
+                  }}
+                  className={styles.input}
+              />
+            </div>
+            <div className={styles.container}>
+              <input
+                  id="card-holder"
+                  type="text"
+                  placeholder="Name on Card"
+                  className={styles.input}
+              />
+              <input
+                  id="card-billing-address-country"
+                  type="text"
+                  placeholder="Country Code"
+                  className={styles.input}
+              />
+            </div>
+            <SubmitPayment onHandleMessage={setMessage} cart={cart} />
           </div>
-          <SubmitPayment onHandleMessage={setMessage} />
-        </div>
-      </PayPalHostedFieldsProvider>
-      <Message content={message} />
-    </div>
+        </PayPalHostedFieldsProvider>
+        <Message content={message} />
+      </div>
   );
 };

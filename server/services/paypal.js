@@ -52,23 +52,13 @@ export const generateClientToken = async () => {
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
  */
 export const createOrder = async (cart) => {
-    const prices = {
-        "Quesabirrias" : 4,
-        "Taco Loko" : 3,
-        "Carne Tacos" : 3,
-    }
-    var totalPrice = 0;
-    cart.forEach(item => {
-        const { id, quantity } = item;
-        const price = prices[id];
-        totalPrice += price * quantity;
-    });
 
-   /* // use the cart information passed from the front-end to calculate the purchase unit details
+
+    // use the cart information passed from the front-end to calculate the purchase unit details
     console.log(
         "shopping cart information passed from the frontend createOrder() callback:",
-        cart, totalPrice.toFixed(2).toString(),
-    );*/
+        cart, cart.totalPrice.toString(),
+    );
 
     const accessToken = await generateAccessToken();
     const url = `${base}/v2/checkout/orders`;
@@ -78,7 +68,7 @@ export const createOrder = async (cart) => {
             {
                 amount: {
                     currency_code: "USD",
-                    value: totalPrice.toFixed(2).toString(),
+                    value: cart.totalPrice.toString(),
                 },
             },
         ],
