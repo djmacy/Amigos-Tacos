@@ -64,7 +64,7 @@ export async function getFoodDetails(orderId) {
         // Execute the SQL query to retrieve order details
         const [rows] = await pool.query(`
             SELECT 
-                oi.item_id AS item_id,
+                o.id AS id,
                 i.name AS item_name,
                 oi.quantity AS quantity,
                 t.has_cilantro AS has_cilantro,
@@ -87,6 +87,40 @@ export async function getFoodDetails(orderId) {
         throw error;
     }
 }
+
+export async function getTodaysFoodDetails() {
+    try {
+        // Execute the SQL query to retrieve order details for orders placed today
+        const [rows] = await pool.query(`
+            SELECT 
+                o.id AS id,
+                i.name AS item_name,
+                oi.quantity AS quantity,
+                t.has_cilantro AS has_cilantro,
+                t.has_onion AS has_onion,
+                t.meat AS meat
+            FROM 
+                order_items oi
+            JOIN 
+                items i ON oi.item_id = i.id
+            JOIN 
+                toppings t ON oi.topping_id = t.id
+            JOIN 
+                orders o ON oi.order_id = o.id
+            WHERE 
+                DATE(o.time_ordered) = CURDATE()
+            ORDER BY 
+                o.id
+        `);
+
+        return rows; // Return the retrieved order details
+    } catch (error) {
+        // Handle any errors
+        console.error("Error fetching today's order details:", error);
+        throw error;
+    }
+}
+
 
 
 export async function getOrderDetails(orderId) {
@@ -215,7 +249,11 @@ insertOrder(orderDetails).then(orderId => {
 */
 //const orders = await getOrders();
 //const insertOrders = await insertOrder(orderDetails);
-//const getOrderItems = await getOrderDetails(6);
+//const getOrderItems = await getOrderDetails(12);
+//const getFoodItems = await getFoodDetails(12)
+//const getTodayOrders = await getTodaysOrders();
+const getTodaysFoodItems = await getTodaysFoodDetails();
+console.log(getTodaysFoodItems)
 
 //console.log(orders);
 //console.log(insertOrders);
