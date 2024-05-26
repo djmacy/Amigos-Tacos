@@ -3,7 +3,7 @@ import "dotenv/config";
 import path from "path";
 
 import { generateClientToken, createOrder, captureOrder } from './services/paypal.js';
-import { getTodaysOrders, insertOrder, getFoodDetails, getOrderDetails } from './services/database.js';
+import { getTodaysOrders, insertOrder, getFoodDetails, getOrderDetails, authenticateUser } from './services/database.js';
 
 const PORT = process.env.PORT || 8888;
 const base = "https://api-m.sandbox.paypal.com";
@@ -52,8 +52,6 @@ app.get("/api/order-details/:orderId", async (req, res) => {
   }
 });
 
-
-
 app.get("/api/order-food-details/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -61,6 +59,23 @@ app.get("/api/order-food-details/:orderId", async (req, res) => {
     res.json(foodDetails);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/user-auth", async (req, res) => {
+  try {
+    const { credentials } = req.body;
+
+    const isAuthenticated = await authenticateUser(credentials);
+
+    if (isAuthenticated) {
+      res.status(201).send({isAuthenticated: isAuthenticated});
+    } else {
+      res.status(401).send({isAuthenticated: isAuthenticated});
+    }
+  } catch (error) {
+    console.error("Error during authentication:", error);
+    res.status(500).send("Internal server error");
   }
 });
 

@@ -119,7 +119,44 @@ export async function getOrderDetails(orderId) {
         console.error("Error fetching order details:", error);
         throw error;
     }
+
 }
+
+export async function authenticateUser(credentials) {
+    if (!credentials.username || !credentials.password) {
+        console.error("Username and Password are mandatory")
+        return
+    }
+    try {
+        const username = credentials.username;
+        const password = credentials.password;
+        // Execute a parameterized query to select the user with the given username and password
+        const [rows] = await pool.query(
+            "SELECT * FROM kitchen_staff WHERE username = ? AND password = ?",
+            [username, password]
+        );
+        //console.log(rows.length > 0)
+        // If there's a matching user, return true; otherwise, return false
+        return rows.length > 0;
+    } catch (error) {
+        // Handle any errors
+        console.error("Error authenticating user:", error);
+        throw error;
+    }
+}
+/*
+authenticateUser('kitchenUser', 'password123').then(isAuthenticated => {
+    if (isAuthenticated) {
+        console.log("user authenticated")
+    } else {
+        console.log("authentication failed")
+    }
+}).catch(error => {
+    console.error("Error: ", error);
+    }
+);
+*/
+
 /*
 // Example usage to get the food details for a specific order ID
 getFoodDetails(1).then(foodDetails => {

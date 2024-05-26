@@ -9,7 +9,6 @@ import {
 } from "@paypal/react-paypal-js";
 //**********Cart must be a list of objects
 
-const approvedCart = {};
 async function createOrderCallback(cart) {
   try {
     const response = await fetch("/api/orders", {
