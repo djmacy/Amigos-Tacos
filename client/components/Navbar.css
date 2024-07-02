@@ -4,11 +4,11 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100px;
+    height: 120px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #fdecbe;
+    background-color: #1b1b1b;
     /* background-color: rgba(253, 236, 190, 0.3); /* Set initial background with alpha 0 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
     transition: background-color 1s ease; /* Add transition effect for smooth change */
@@ -34,7 +34,7 @@ li {
 .navbar-link a {
     text-decoration: none;
     margin: 20px;
-    color: black;
+    color: #e3d9c8;
     font-size: 20px;
     /* font-family: "Caveat", cursive;*/
     font-weight: 600;
@@ -56,12 +56,12 @@ li {
     left: 50%;
     width: 0;
     height: 1px;
-    background-color: #000;  /* Set your desired line color */
+    background-color: #eebd7d;  /* Set your desired line color */
     transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
 }
 
 .navbar-link a:hover {
-    color: black;
+    color: #eebd7d;
 }
 
 .navbar-link a:hover::after {
@@ -84,14 +84,14 @@ li {
     margin-right: 10px;
     width: 4em;
     height: 0.5em;
-    background-color: #534d3e;
+    background-color: #eebd7d;
     border-radius: 0.5em;
 }
 
 .menu {
     width: 40%;
     height: 100vh;
-    background-color: #534d3e;
+    background-color: #eebd7d;
     position: fixed;
     top: 0;
     left: -100%;

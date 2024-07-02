@@ -1,6 +1,7 @@
 /* Footer.css */
 .footer-container {
-    background-color: #fdecbe;
+    z-index: 0;
+    background-color: #1b1b1b;
     color: #534d3e;
     text-align: center;
     /*padding: 10px;*/
@@ -8,13 +9,12 @@
     width: 100%;
     margin-top: 20px;
     margin-bottom: 20px;
-
-    z-index: 0;
 }
 
 p {
     margin: 5px 0;
-    /* font-family: "Caveat", cursive;*/
+    font-family: "Arapey", serif;
+    color: #eebd7d;
 }
 
 .social-media-icons {

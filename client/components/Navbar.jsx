@@ -41,20 +41,29 @@ const Navbar = () => {
         }
         setIsMenuClicked(!isMenuClicked);
     }
+    return (
+        <nav>
+            <Logo below={true}/>
+            <ul className="navbar-link">
+                {/*<li><a href="/">Home</a></li>*/}
+            </ul>
+        </nav>
+    );
+    { /*
     if (window.innerWidth > 850) {
         return (
             <nav>
-                <Logo below={false}/>
+                <Logo below={true}/>
                 <ul className="navbar-link">
-                    <li><a href="/">Home</a></li>
+                    {/*<li><a href="/">Home</a></li>
                 </ul>
             </nav>
-        );
+ /*);
     } else {
         return (
             <div>
                 <nav>
-                    <Logo below={false}/>
+                    <Logo below={true}/>
                     <div className="burger-menu" onClick={updateMenu}>
                         <div className={burger_class} ></div>
                         <div className={burger_class} ></div>
@@ -69,7 +78,7 @@ const Navbar = () => {
                 </div>
             </div>
         )
-    }
+    }*/}
 };
 
 export default Navbar;

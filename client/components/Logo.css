@@ -6,28 +6,29 @@
 }
 
 .logo-below {
-    height: 1000%;
-    opacity: 0; /* Initially set opacity to 0 */
-    animation: fadeIn 2.0s ease-in-out forwards; /* Apply animation */
+    height: 100%;
+    width: 100%;
     justify-content: center;
     text-align: center;
 }
 
 .logo-below img {
-    height: 500px;
+    height: 65%;
+    align-items: center; /* Vertically align items */
 }
 
 .h2-below {
-    /* font-family: "Licorice", cursive;*/
+    font-family: "Arapey", serif;
     font-weight: 800;
     font-style: normal;
-    font-size: 60px;
-    margin-top: -75px;
+    font-size: 35px;
+    margin: -5px;
+    color: #eebd7d;
     text-align: center;
 }
 
 .h2-right {
-    /* font-family: "Licorice", cursive;*/
+    font-family: "Arapey", serif;
     font-weight: 800;
     font-style: normal;
     font-size: 46px;
@@ -46,130 +47,4 @@
     color: black;
     /*padding: 10px; /* Add padding for better clickability */
     /*  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
-}
-
-@media only screen and (max-width: 960px) {
-    .h2-right {
-        /* font-family: "Licorice", cursive;*/
-        font-weight: 800;
-        font-style: normal;
-        font-size: 30px;
-        margin-left: 20px;
-        z-index: 100;
-    }
-}
-
-@media only screen and (max-width: 601px) {
-    .h2-right {
-        /*  font-family: "Licorice", cursive;*/
-        font-weight: 800;
-        font-style: normal;
-        font-size: 25px;
-        margin-left: 20px;
-        z-index: 100;
-    }
-
-    .h2-below {
-        /* font-family: "Licorice", cursive;*/
-        font-weight: 800;
-        font-style: normal;
-        font-size: 40px;
-        margin-top: -75px;
-        text-align: center;
-    }
-
-    .logo-below img {
-        height: 400px;
-    }
-
-    .logo-below img {
-        margin-top: 60px;
-    }
-}
-
-@media only screen and (max-width: 450px) {
-    .h2-right {
-        /*  font-family: "Licorice", cursive;*/
-        font-weight: 800;
-        font-style: normal;
-        font-size: 25px;
-        margin-left: 0px;
-        z-index: 100;
-    }
-
-    .logo-below img {
-        height: 300px;
-        margin-top: 90px;
-    }
-
-    .logo-below {
-        height: 500px;
-    }
-}
-
-@media only screen and (max-width: 410px) {
-    .h2-right {
-        /*  font-family: "Licorice", cursive;*/
-        font-weight: 800;
-        font-style: normal;
-        font-size: 20px;
-        margin-left: 0px;
-        z-index: 100;
-    }
-
-    .logo-below img {
-        margin-top: 100px;
-    }
-}
-
-@media only screen and (max-width: 380px) {
-    .h2-right {
-        /*    font-family: "Licorice", cursive;*/
-        font-weight: 800;
-        font-style: normal;
-        font-size: 15px;
-        margin-left: 0px;
-        z-index: 100;
-    }
-
-    .logo img {
-        height: 100px;
-        width: 100px;
-    }
-
-    .logo-below img {
-        margin-top: 100px;
-    }
-
-}
-
-@media only screen and (max-width: 310px) {
-    .h2-right {
-        /*  font-family: "Licorice", cursive;*/
-        font-weight: 800;
-        font-style: normal;
-        font-size: 15px;
-        margin-left: 0px;
-        z-index: 100;
-    }
-
-    .logo img {
-        height: 75px;
-        width: 75px;
-    }
-
-    .h2-below {
-        /*  font-family: "Licorice", cursive;*/
-        font-weight: 800;
-        font-style: normal;
-        font-size: 35px;
-        margin-top: -60px;
-        text-align: center;
-    }
-
-    .logo-below img {
-        height: 250px;
-        margin-top: 125px;
-    }
-
 }

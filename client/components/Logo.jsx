@@ -1,5 +1,5 @@
 import './Logo.css'
-import logoImage from '../images/AmigosTacosLogo.png'; // Replace 'logo.png' with the path to your logo image
+import logoImage from '../images/newAmigosTacosLogo.png'; // Replace 'logo.png' with the path to your logo image
 
 const Logo = ({below}) => {
 

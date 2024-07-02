@@ -2,7 +2,7 @@
 import React from 'react';
 import './Footer.css';
 //import fbLogo from "../images/fbLogo.png";
-import instaLogo from "../images/instaLogo.png";
+import instaLogo from "../images/instaNew.png";
 
 const Footer = () => {
     return (
