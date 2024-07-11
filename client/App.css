@@ -1,0 +1,84 @@
+html, body, #root {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: #e3d7c8;
+}
+
+h1, h2, h3, p, label {
+    font-family: "Arapey", serif;
+    color: #1b1b1b;
+}
+
+/* Keyframes for moving the overlay up */
+@keyframes moveUp {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-83vh); /* Using vh units for consistency */
+    }
+}
+
+/* Keyframes for moving the logo and text down */
+@keyframes moveDown {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(43vh); /* Adjust the value as needed */
+    }
+}
+
+/* Combined keyframes for scaling down and adjusting the text position */
+@keyframes scaleAndAdjustPosition {
+    0% {
+        transform: scale(1) translateY(0);
+    }
+    100% {
+        transform: scale(0.60) translateY(-3vh); /* Using vh units and adjust scale factor */
+    }
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1b1b1b;
+    display: flex;
+    flex-direction: column; /* Arrange items vertically */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* Ensure it's above all other content */
+}
+
+#overlay.move-up {
+    animation: moveUp 1s forwards; /* Move the overlay up */
+}
+
+#overlay .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: moveDown 1s forwards; /* Move the logo and text down */
+}
+
+#overlay .logo-container img {
+    max-width: 50%; /* Adjust the size as needed */
+    max-height: 50%; /* Adjust the size as needed */
+}
+
+#overlay .logo-container h1 {
+    font-family: "Arapey", serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 60px;
+    margin: -5px;
+    color: #eebd7d;
+    text-align: center;
+    animation: scaleAndAdjustPosition 1s forwards; /* Use the combined animation */
+}

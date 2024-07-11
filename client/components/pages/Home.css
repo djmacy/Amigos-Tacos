@@ -1,3 +1,13 @@
+.order-label {
+    justify-content: center;
+    text-align: center;
+    margin-top: 150px;
+    font-family: "Arapey", serif;
+    font-weight: 800;
+    color: #1b1b1b;
+
+}
+
 .total-price {
     text-align: center;
     justify-content: center;

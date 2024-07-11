@@ -47,6 +47,7 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
     const quantityList = createObjectList(maxQuantity);
 
     const quantityChange = (selectedOption) => {
+
         if (!selectedOption) {
             setPriceCalc(0);
             const newQuantity = 0;
@@ -54,7 +55,11 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
             onQuantityChange(newQuantity);
             return;
         }
-
+        //console.log(selectedOption)
+        if (selectedOption.value === "1") {
+            //console.log("true")
+            setSameToppings(true);
+        }
         const { value } = selectedOption;
         const newQuantity = parseInt(value);
         setQuantity(newQuantity);

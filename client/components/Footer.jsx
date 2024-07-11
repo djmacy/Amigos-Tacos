@@ -7,8 +7,8 @@ import instaLogo from "../images/instaNew.png";
 const Footer = () => {
     return (
         <footer className="footer-container">
-            <p>&copy; {new Date().getFullYear()} Amigos Tacos LLC. All rights reserved.</p>
-            <p>Powered by <a href="mailto:macydavid2001@gmail.com">David Macy</a></p>
+            <p className="footer-text">&copy; {new Date().getFullYear()} Amigos Tacos LLC. All rights reserved.</p>
+            <p className="footer-text">Powered by <a href="mailto:macydavid2001@gmail.com">David Macy</a></p>
             <div className="social-media-icons">
                 { /*<a href="https://www.facebook.com/cucinadimonica/" target="_blank" rel="noopener noreferrer">
                     <img src={fbLogo} alt="Facebook" />

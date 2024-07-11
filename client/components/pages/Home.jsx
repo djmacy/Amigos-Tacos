@@ -178,7 +178,11 @@ const Home = () => {
     };
 
     return (
+
         <div>
+            <div className="order-label">
+                <h1>Order Now</h1>
+            </div>
             <div className="food-cards-container">
                 {foodCards.map((foodCard, index) => (
                     <FoodCard
