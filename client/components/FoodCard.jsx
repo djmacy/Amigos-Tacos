@@ -128,17 +128,7 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
     const renderToppings = (index) => (
         <div key={index}>
             <div className="food-toppings">
-                    <label>
-                        Cilantro:
-                        <input type="checkbox" name={`cilantro-${cardIndex}-${index}`} checked={cilantro[index]} onChange={(event) => handleCilantroChange(index, event)}/>
-                    </label>
-                    <label>
-                        Onions:
-                        <input type="checkbox" name={`onions-${cardIndex}-${index}`} checked={onions[index]} onChange={(event) => handleOnionsChange(index, event)} />
-                    </label>
-            </div>
-            <div className="food-toppings">
-                <label>Meat:</label>
+                <label className="section-label">Meat:</label>
                 <label>
                     <input
                         type="radio"
@@ -170,6 +160,19 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                     Carne Asada
                 </label>
             </div>
+            <div className="food-toppings">
+                <label className="section-label">Toppings:</label>
+
+                <label>
+                        Cilantro:
+                        <input type="checkbox" name={`cilantro-${cardIndex}-${index}`} checked={cilantro[index]} onChange={(event) => handleCilantroChange(index, event)}/>
+                    </label>
+                    <label>
+                        Onions:
+                        <input type="checkbox" name={`onions-${cardIndex}-${index}`} checked={onions[index]} onChange={(event) => handleOnionsChange(index, event)} />
+                    </label>
+            </div>
+
             {index < quantity - 1 && <hr />}
         </div>
     );
@@ -181,17 +184,8 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
             {sameToppings && quantity !== 0 && (
                 <div>
                     <div className="food-toppings">
-                            <label>
-                                Cilantro:
-                                <input type="checkbox" name={`cilantro-${cardIndex}`} checked={cilantro[0]} onChange={(event) => handleCilantroChange(0, event)} />
-                            </label>
-                            <label>
-                                Onions:
-                                <input type="checkbox" name={`onions-${cardIndex}`} checked={onions[0]} onChange={(event) => handleOnionsChange(0, event)} />
-                            </label>
-                    </div>
-                    <div className="food-toppings">
-                        <label>Meat:</label>
+                        <label className="section-label">Meat:</label>
+
                         <label>
                             <input
                                 type="radio"
@@ -201,6 +195,7 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                                 onChange={(event) => handleMeatChange(0, event)}
                             />
                             Birria
+
                         </label>
                         <label>
                             <input
@@ -223,6 +218,18 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                             Carne Asada
                         </label>
                     </div>
+                    <div className="food-toppings">
+                        <label className="section-label">Toppings:</label>
+                            <label>
+                                Cilantro:
+                                <input type="checkbox" name={`cilantro-${cardIndex}`} checked={cilantro[0]} onChange={(event) => handleCilantroChange(0, event)} />
+                            </label>
+                            <label>
+                                Onions:
+                                <input type="checkbox" name={`onions-${cardIndex}`} checked={onions[0]} onChange={(event) => handleOnionsChange(0, event)} />
+                            </label>
+                    </div>
+
                 </div>
             )}
             {!sameToppings && quantity > 1 && (
@@ -248,7 +255,7 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                     </label>
                     : null}
             </div>
-            <p>
+            <p className="same-toppings">
                 {priceCalc !== 0 ? `Price for ${title.toLowerCase()}: $${priceCalc}` : null}
             </p>
         </div>

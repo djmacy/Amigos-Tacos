@@ -5,13 +5,59 @@
     font-family: "Arapey", serif;
     font-weight: 800;
     color: #1b1b1b;
+}
 
+.contact-select-coke {
+    text-align: left;
+    width: 70%;
+    justify-content: center;
+    margin: 0 auto;
+    padding-top: 5px;
 }
 
 .total-price {
+    width: 250px;
     text-align: center;
     justify-content: center;
+    margin: 0 auto; /* Center the element horizontally */
 }
+
+
+.total-price-label {
+    font-size: 1.5em; /* Make the text larger */
+    font-weight: bold; /* Make the text bold */
+    color: #eebd7d; /* Use a color that complements your theme */
+    background-color: #1b1b1b; /* Add a contrasting background color */
+    padding: 10px; /* Add padding for spacing around the text */
+    border-radius: 5px; /* Add rounded corners */
+    text-align: center; /* Center the text within the label */
+    margin-top: 15px; /* Add some space above the label */
+    display: inline-block; /* Ensure the background color doesn't extend the full width */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+}
+
+
+.total-price label {
+    display: block; /* Make each label start on a new line */
+    margin-bottom: 10px; /* Add space below each label */
+}
+
+.total-price .salsa-container {
+    display: flex;
+    justify-content: space-between; /* Ensure space between the checkboxes */
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.total-price .salsa-container label {
+    display: flex;
+    align-items: center;
+}
+
+.total-price select, .total-price input[type="checkbox"] {
+    margin-left: 5px; /* Optional: add some space between label text and input elements */
+}
+
 
 .pay-pal-buttons-home {
     padding-top: 100px;
@@ -23,7 +69,9 @@
 
 .food-cards-container {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-   /* text-align: center;*/
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    justify-content: space-evenly; /* Align items to the start of the container */
+    align-items: flex-start; /* Align items to the top of the container */
+    gap: 1em; /* Add space between the food cards */
+    padding: 1em;
 }

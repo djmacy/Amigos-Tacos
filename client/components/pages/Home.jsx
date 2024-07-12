@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import birriaPicture from "../../images/AmigosTacosLogo.png";
 import foodCard from "../FoodCard.jsx";
+import Select from "react-select";
 
 const Home = () => {
     const [totalPrice, setTotalPrice] = useState(0);
@@ -163,7 +164,15 @@ const Home = () => {
     }
 
     const handleMexicanCokesChange = (event) => {
-        const newQuantity = parseInt(event.target.value);
+
+        if (!event) {
+            const newQuantity = 0;
+            setMexicanCokes(newQuantity);
+            return;
+        }
+        //console.log(event.value);
+        const newQuantity = parseInt(event.value);
+
         const oldPrice = mexicanCokes * cokePrice
         const cokePriceAdjustment = newQuantity * cokePrice;
         setTotalPrice(prevTotalPrice => prevTotalPrice + cokePriceAdjustment - oldPrice);
@@ -176,6 +185,21 @@ const Home = () => {
         setCart(generateCart());
         //console.log(cart);
     };
+
+    function createObjectList(number) {
+        let objectList = [];
+        const labels = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"];
+        for (let i = 0; i < number; i++) {
+            let obj = {
+                label: labels[i],
+                value: (i + 1).toString()
+            };
+            objectList.push(obj);
+        }
+        return objectList;
+    }
+
+    const mexicanCokesQuant = createObjectList(6);
 
     return (
 
@@ -209,29 +233,36 @@ const Home = () => {
                 {(totalPrice > 0 && !containsItems()) && (
                     <>
                         <label>
-                            Salsa Verde:
-                            <input type="checkbox" name="salsaVerde" checked={salsaVerde} onChange={handleSalsaVerdeChange}/>
-                        </label>
-                        <label>
-                            Salsa Rojo:
-                            <input type="checkbox" name="salsaRojo" checked={salsaRojo} onChange={handleSalsaRojoChange}/>
-                        </label>
-                        <br/>
-                        <label>
                             Mexican Cokes:
-                            <select value={mexicanCokes} onChange={handleMexicanCokesChange}>
-                                {[...Array(7).keys()].map(num => (
-                                    <option key={num} value={num}>{num}</option>
-                                ))}
-                            </select>
+                            <Select
+                                name="coke-quantity"
+                                isClearable={true}
+                                placeholder="Mexican Cokes"
+                                options={mexicanCokesQuant}
+                                className="contact-select-coke"
+                                classNamePrefix="select"
+                                value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
+                                onChange={handleMexicanCokesChange}
+                            />
                         </label>
-                        <br/>
+                        <div className="salsa-container">
+                            <label>
+                                Salsa Verde:
+                                <input type="checkbox" name="salsaVerde" checked={salsaVerde} onChange={handleSalsaVerdeChange} />
+                            </label>
+                            <label>
+                                Salsa Rojo:
+                                <input type="checkbox" name="salsaRojo" checked={salsaRojo} onChange={handleSalsaRojoChange} />
+                            </label>
+                        </div>
+
+
                         <label>
                             Deliver My Food:
                             <input type="checkbox" name="delivery" checked={isDelivery} onChange={handleDeliveryChange} />
                         </label>
 
-                        <p>Total Price: ${totalPrice}</p>
+                        <p className="total-price-label">Total Price: ${totalPrice}</p>
                         <button onClick={handlePayPalButtonClick} className="paypal-button">
                             Generate Checkout
                         </button>
