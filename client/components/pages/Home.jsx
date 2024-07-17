@@ -2,9 +2,11 @@ import PayPalButtons from "../PayPalButtons.jsx";
 import FoodCard from "../FoodCard.jsx";
 import React, { useEffect, useState } from "react";
 import "./Home.css";
-import birriaPicture from "../../images/AmigosTacosLogo.png";
+import birriaPicture from "../../images/quesabirriaImage.jpg";
+import carneTacoPicture from "../../images/carneAsadaTaco.jpg";
 import foodCard from "../FoodCard.jsx";
 import Select from "react-select";
+import styles from "../PaymentForm.module.css";
 
 const Home = () => {
     const [totalPrice, setTotalPrice] = useState(0);
@@ -12,13 +14,14 @@ const Home = () => {
     const [isDelivery, setDelivery] = useState(false);
     const [salsaVerde, setSalsaVerde] = useState(true);
     const [salsaRojo, setSalsaRojo] = useState(true);
+    const [customer, setCustomer] = useState({});
     const [mexicanCokes, setMexicanCokes] = useState(0); // State for Mexican Cokes quantity
     const cokePrice = 2;
 
     const [foodCards, setFoodCards] = useState([
         { title: "Quesabirrias", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 4, maxQuantity: 3, quantity: 0 },
-        { title: "Loko Taco", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 3, maxQuantity: 4, quantity: 0 },
-        { title: "Carne Asada Taco", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 3, maxQuantity: 4, quantity: 0 }
+        { title: "Loko Taco", imageUrl: carneTacoPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 3, maxQuantity: 4, quantity: 0 },
+        { title: "Carne Asada Taco", imageUrl: carneTacoPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 3, maxQuantity: 4, quantity: 0 }
     ]);
     const [paypalButtonTrigger, setPaypalButtonTrigger] = useState(false);
 
@@ -89,13 +92,23 @@ const Home = () => {
             hasSalsaRojo: salsaRojo ? 'Yes' : 'No',
             mexicanCokes: mexicanCokes,
             totalPrice: totalPrice.toFixed(2),
-            items: items
+            items: items,
+            customer: customer
+
+
         };
 
         console.log(orderDetails);
         return orderDetails;
     }
 
+    const handleInputChange = (e) => {
+        const { id, value } = e.target;
+        setCustomer((prevCustomer) => ({
+            ...prevCustomer,
+            [id]: value,
+        }));
+    };
 
     const handleQuantityChange = (index, newQuantity) => {
         const updatedFoodCards = [...foodCards];
@@ -132,8 +145,6 @@ const Home = () => {
         setFoodCards(updatedFoodCards);
     }
 
-
-
     const handleMeatChoiceChange = (index, newMeatChoice) => {
         const updatedFoodCards = [...foodCards];
         updatedFoodCards[index].meatChoice = newMeatChoice;
@@ -167,8 +178,11 @@ const Home = () => {
 
         if (!event) {
             const newQuantity = 0;
+            const oldPrice = mexicanCokes * cokePrice
+            const cokePriceAdjustment = 0;
+            setTotalPrice(prevTotalPrice => prevTotalPrice + cokePriceAdjustment - oldPrice);
             setMexicanCokes(newQuantity);
-            return;
+            return
         }
         //console.log(event.value);
         const newQuantity = parseInt(event.value);
@@ -229,22 +243,25 @@ const Home = () => {
                     />
                 ))}
             </div>
+
             <div className="total-price">
                 {(totalPrice > 0 && !containsItems()) && (
                     <>
-                        <label>
+                        <h1>Additional Details</h1>
+                        <label className="additional-info-label">
                             Mexican Cokes:
-                            <Select
-                                name="coke-quantity"
-                                isClearable={true}
-                                placeholder="Mexican Cokes"
-                                options={mexicanCokesQuant}
-                                className="contact-select-coke"
-                                classNamePrefix="select"
-                                value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
-                                onChange={handleMexicanCokesChange}
-                            />
+
                         </label>
+                        <Select
+                            name="coke-quantity"
+                            isClearable={true}
+                            placeholder="Mexican Cokes"
+                            options={mexicanCokesQuant}
+                            className="contact-select-coke"
+                            classNamePrefix="select"
+                            value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
+                            onChange={handleMexicanCokesChange}
+                        />
                         <div className="salsa-container">
                             <label>
                                 Salsa Verde:
@@ -256,11 +273,69 @@ const Home = () => {
                             </label>
                         </div>
 
-
                         <label>
                             Deliver My Food:
                             <input type="checkbox" name="delivery" checked={isDelivery} onChange={handleDeliveryChange} />
                         </label>
+                        <h2>Personal Information</h2>
+                        <div className="info-container">
+
+                            <div className="input-group">
+                                <label>Preferred Name:</label>
+                                <input
+                                    id="name"
+                                    type="text"
+                                    placeholder="Name"
+                                    className="info-input"
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Phone Number:</label>
+                                <input
+                                    id="phone"
+                                    type="text"
+                                    placeholder="Phone Number"
+                                    className="info-input"
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="info-container">
+                            <div className="input-group">
+                                <label>Email:</label>
+                                <input
+                                    id="email"
+                                    type="text"
+                                    placeholder="Email"
+                                    className="info-input"
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="info-container">
+                            <div className="input-group">
+                                <label>Street Address:</label>
+                                <input
+                                    id="address"
+                                    type="text"
+                                    placeholder="Address"
+                                    className="info-input"
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>City:</label>
+                                <input
+                                    id="city"
+                                    type="text"
+                                    placeholder="City"
+                                    className="info-input"
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                        </div>
+
 
                         <p className="total-price-label">Total Price: ${totalPrice}</p>
                         <button onClick={handlePayPalButtonClick} className="paypal-button">

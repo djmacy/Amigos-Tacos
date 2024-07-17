@@ -248,7 +248,7 @@ export const PaymentForm = ({ cart }) => {
               <input
                   id="card-billing-address-country"
                   type="text"
-                  placeholder="Country Code"
+                  placeholder="Billing Zip Code"
                   className={styles.input}
               />
             </div>

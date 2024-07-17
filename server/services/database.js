@@ -25,23 +25,30 @@ export async function insertOrder(orderDetails) {
     try {
         await connection.beginTransaction();
 
-        // Insert into orders table
-        const [result] = await connection.query(
-            "INSERT INTO orders (is_delivery, is_ready, has_salsa_verde, has_salsa_rojo, mexican_cokes, total_price) VALUES (?, ?, ?, ?, ?, ?)",
-            [orderDetails.isDelivery, orderDetails.isReady, orderDetails.hasSalsaVerde, orderDetails.hasSalsaRojo, orderDetails.mexicanCokes, orderDetails.totalPrice]
+        // Insert into customer table
+        const [customerResult] = await connection.query(
+            "INSERT INTO customer (name, phone, email, address, city) VALUES (?, ?, ?, ?, ?)",
+            [orderDetails.customer.name, orderDetails.customer.phone, orderDetails.customer.email, orderDetails.customer.address, orderDetails.customer.city]
         );
-        const orderId = result.insertId; // Get the order_id of the newly inserted order
+        const customerId = customerResult.insertId; // Get the customer_id of the newly inserted customer
 
-        // Insert into order_item table for each item in the order
+        // Insert into orders table with customer_id
+        const [orderResult] = await connection.query(
+            "INSERT INTO orders (is_delivery, is_ready, has_salsa_verde, has_salsa_rojo, mexican_cokes, total_price, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [orderDetails.isDelivery, orderDetails.isReady, orderDetails.hasSalsaVerde, orderDetails.hasSalsaRojo, orderDetails.mexicanCokes, orderDetails.totalPrice, customerId]
+        );
+        const orderId = orderResult.insertId; // Get the order_id of the newly inserted order
+
+        // Insert into order_items table for each item in the order
         for (const item of orderDetails.items) {
-            // Insert topping details for the item into the topping table
+            // Insert topping details for the item into the toppings table
             const [toppingResult] = await connection.query(
                 "INSERT INTO toppings (has_cilantro, has_onion, meat) VALUES (?, ?, ?)",
                 [item.hasCilantro, item.hasOnion, item.meat]
             );
             const toppingId = toppingResult.insertId; // Get the topping_id of the newly inserted topping
 
-            // Insert item into order_item table
+            // Insert item into order_items table
             await connection.query(
                 "INSERT INTO order_items (order_id, item_id, topping_id, quantity) VALUES (?, ?, ?, ?)",
                 [orderId, item.itemId, toppingId, item.quantity]
@@ -58,6 +65,7 @@ export async function insertOrder(orderDetails) {
         connection.release();
     }
 }
+
 
 export async function getFoodDetails(orderId) {
     try {

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../AuthContext.jsx';
 import './Orders.css';
+import { useNavigate } from 'react-router-dom';
 
 const Orders = () => {
     const { isAuthenticated } = useAuth();
-    const [orders, setOrders] = useState([]);
+    const navigate = useNavigate();
+    const [orderIds, setOrderIds] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -19,8 +21,9 @@ const Orders = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                setOrders(data);
-                console.log(data)
+                const ids = data.map(order => order.id); // Extract only the order IDs
+                setOrderIds(ids);
+                console.log(ids);
             } else {
                 console.error('Failed to fetch orders:', response.statusText);
             }
@@ -28,6 +31,20 @@ const Orders = () => {
             console.error('Error fetching orders:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchOrderDetails = async (orderId) => {
+        try {
+            const response = await fetch(`/api/order-food-details/${orderId}`);
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+            } else {
+                console.error('Failed to fetch order details:', response.statusText);
+            }
+        } catch (e) {
+            console.error('Error fetching details:', e);
         }
     };
 
@@ -43,9 +60,9 @@ const Orders = () => {
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                <ul>
-                    {orders.map(order => (
-                        <li key={order.id}>{order.has_salsa_verde}</li>
+                <ul className='order-list'>
+                    {orderIds.map(id => (
+                        <li key={id} onClick={() => fetchOrderDetails(id)}>{id}</li>
                     ))}
                 </ul>
             )}

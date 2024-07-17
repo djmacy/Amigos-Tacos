@@ -1,27 +1,53 @@
 .order-label {
     justify-content: center;
     text-align: center;
-    margin-top: 150px;
+    margin-top: 175px;
     font-family: "Arapey", serif;
     font-weight: 800;
     color: #1b1b1b;
 }
 
-.contact-select-coke {
-    text-align: left;
-    width: 70%;
-    justify-content: center;
-    margin: 0 auto;
-    padding-top: 5px;
+.info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* Adjust spacing between inputs */
+    align-items: center; /* Vertically center the inputs */
+    gap: 10px; /* Optional: add some gap between inputs */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column; /* Stack label and input vertically */
+    width: 100%; /* Ensure full width for each input group */
+}
+
+.input-group label {
+    align-self: flex-start; /* Align the label to the start of the column */
+    margin-bottom: 0; /* Remove margin at the bottom */
+    margin-left: 5px
+}
+
+.info-input {
+    padding: 12px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin: 5px 2px;
+    resize: vertical;
+    height: 40px;
+    background: white;
+    font-size: 14px;
+    color: #3a3a3a;
+    font-family: Arapey, serif;
 }
 
 .total-price {
-    width: 250px;
+    width: 275px;
     text-align: center;
     justify-content: center;
     margin: 0 auto; /* Center the element horizontally */
 }
-
 
 .total-price-label {
     font-size: 1.5em; /* Make the text larger */
@@ -37,9 +63,10 @@
 }
 
 
-.total-price label {
+.additional-info-label {
     display: block; /* Make each label start on a new line */
-    margin-bottom: 10px; /* Add space below each label */
+    margin-bottom: 5px; /* Add space below each label */
+
 }
 
 .total-price .salsa-container {
@@ -49,6 +76,15 @@
     margin-right: 25px;
 }
 
+.contact-select-coke {
+    text-align: left;
+    font-family: "Arapey", serif;
+    width: 100%;
+    display: flex;
+    justify-content: left; /* Center the content horizontally */
+    margin-bottom: 5px;
+}
+
 .total-price .salsa-container label {
     display: flex;
     align-items: center;
@@ -56,6 +92,7 @@
 
 .total-price select, .total-price input[type="checkbox"] {
     margin-left: 5px; /* Optional: add some space between label text and input elements */
+
 }
 
 
