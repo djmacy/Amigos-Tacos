@@ -17,6 +17,15 @@ const Home = () => {
     const [customer, setCustomer] = useState({});
     const [mexicanCokes, setMexicanCokes] = useState(0); // State for Mexican Cokes quantity
     const cokePrice = 2;
+    const waterPrice = 1;
+    const [inputsDisabled, setInputsDisabled] = useState(false);
+    const [formValues, setFormValues] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        city: ''
+    });
 
     const [foodCards, setFoodCards] = useState([
         { title: "Quesabirrias", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 4, maxQuantity: 3, quantity: 0 },
@@ -108,6 +117,14 @@ const Home = () => {
             ...prevCustomer,
             [id]: value,
         }));
+        setFormValues(prevState => ({
+            ...prevState,
+            [id]:value
+        }))
+    };
+
+    const isFormValid = () => {
+        return formValues.name && formValues.phone && formValues.email && formValues.address && formValues.city;
     };
 
     const handleQuantityChange = (index, newQuantity) => {
@@ -195,10 +212,41 @@ const Home = () => {
 
 
     const handlePayPalButtonClick = () => {
-        setPaypalButtonTrigger(true);
-        setCart(generateCart());
+        const phoneRegex = /^\d{10}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneValid = phoneRegex.test(formValues.phone);
+        const emailValid = emailRegex.test(formValues.email);
+
+        if (phoneValid && emailValid) {
+            if (isDelivery) {
+                if (formValues.city.toLowerCase() !== "helena") {
+                    alert("Sorry we currently only deliver in the Helena area :(");
+                } else {
+                    setPaypalButtonTrigger(true);
+                    setCart(generateCart());
+                    setInputsDisabled(true);
+                }
+            } else {
+                setPaypalButtonTrigger(true);
+                setCart(generateCart());
+                setInputsDisabled(true);
+            }
+
+        } else {
+            if (!phoneValid) {
+                alert("Please enter a valid 9-digit phone number.");
+            }
+            if (!emailValid) {
+                alert("Please enter a valid email address.");
+            }
+            if (formValues.city.toLowerCase() !== "helena") {
+                alert("Sorry we currently only deliver in the Helena area :(");
+            }
+        }
+
         //console.log(cart);
     };
+
 
     function createObjectList(number) {
         let objectList = [];
@@ -239,7 +287,8 @@ const Home = () => {
                         maxQuantity={foodCard.maxQuantity}
                         quantity={foodCard.quantity}
                         onQuantityChange={newQuantity => handleQuantityChange(index, newQuantity)}
-                        cardIndex={index} // Pass the cardIndex prop
+                        cardIndex={index}
+                        inputsDisabled={inputsDisabled}
                     />
                 ))}
             </div>
@@ -247,37 +296,62 @@ const Home = () => {
             <div className="total-price">
                 {(totalPrice > 0 && !containsItems()) && (
                     <>
-                        <h1>Additional Details</h1>
-                        <label className="additional-info-label">
-                            Mexican Cokes:
+                        <h2 className="detail-label">Drinks</h2>
+                        {/*<p className="detail-label">Drinks</p>*/}
+                        <div className="info-container">
 
-                        </label>
-                        <Select
-                            name="coke-quantity"
-                            isClearable={true}
-                            placeholder="Mexican Cokes"
-                            options={mexicanCokesQuant}
-                            className="contact-select-coke"
-                            classNamePrefix="select"
-                            value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
-                            onChange={handleMexicanCokesChange}
-                        />
-                        <div className="salsa-container">
-                            <label>
-                                Salsa Verde:
-                                <input type="checkbox" name="salsaVerde" checked={salsaVerde} onChange={handleSalsaVerdeChange} />
-                            </label>
-                            <label>
-                                Salsa Rojo:
-                                <input type="checkbox" name="salsaRojo" checked={salsaRojo} onChange={handleSalsaRojoChange} />
-                            </label>
+                            <div className="input-group">
+                                <label>Mexican Cokes:</label>
+                                <Select
+                                    name="coke-quantity"
+                                    isClearable={true}
+                                    placeholder="Coke"
+                                    options={mexicanCokesQuant}
+                                    className="contact-select-coke"
+                                    classNamePrefix="select"
+                                    value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
+                                    onChange={handleMexicanCokesChange}
+                                    isDisabled={inputsDisabled}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Waters:</label>
+                                <Select
+                                    name="coke-quantity"
+                                    isClearable={true}
+                                    placeholder="Water"
+                                    options={mexicanCokesQuant}
+                                    className="contact-select-coke"
+                                    classNamePrefix="select"
+                                    value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
+                                    onChange={handleMexicanCokesChange}
+                                    isDisabled={inputsDisabled}
+                                />
+                            </div>
                         </div>
-
+                        <h2 className="detail-label">Salsas</h2>
+                        {/*<p className="detail-label">Salsas</p>*/}
+                        <div className="salsa-container">
+                            <div className="checkbox-group">
+                                <label>
+                                    Salsa Verde:
+                                    <input type="checkbox" name="salsaVerde" checked={salsaVerde} onChange={handleSalsaVerdeChange}  disabled={inputsDisabled}/>
+                                </label>
+                            </div>
+                            <div className="checkbox-group">
+                                <label>
+                                    Salsa Rojo:
+                                    <input type="checkbox" name="salsaRojo" checked={salsaRojo} onChange={handleSalsaRojoChange}  disabled={inputsDisabled}/>
+                                </label>
+                            </div>
+                        </div>
+                        <h2 className="detail-label">Delivery</h2>
+                        {/*<p className="detail-label">Delivery</p>*/}
                         <label>
                             Deliver My Food:
-                            <input type="checkbox" name="delivery" checked={isDelivery} onChange={handleDeliveryChange} />
+                            <input type="checkbox" name="delivery" checked={isDelivery} onChange={handleDeliveryChange}  disabled={inputsDisabled}/>
                         </label>
-                        <h2>Personal Information</h2>
+                        <h2 className="detail-label">Personal Information</h2>
                         <div className="info-container">
 
                             <div className="input-group">
@@ -288,6 +362,7 @@ const Home = () => {
                                     placeholder="Name"
                                     className="info-input"
                                     onChange={handleInputChange}
+                                    disabled={inputsDisabled}
                                 />
                             </div>
                             <div className="input-group">
@@ -298,6 +373,7 @@ const Home = () => {
                                     placeholder="Phone Number"
                                     className="info-input"
                                     onChange={handleInputChange}
+                                    disabled={inputsDisabled}
                                 />
                             </div>
                         </div>
@@ -310,6 +386,7 @@ const Home = () => {
                                     placeholder="Email"
                                     className="info-input"
                                     onChange={handleInputChange}
+                                    disabled={inputsDisabled}
                                 />
                             </div>
                         </div>
@@ -322,6 +399,7 @@ const Home = () => {
                                     placeholder="Address"
                                     className="info-input"
                                     onChange={handleInputChange}
+                                    disabled={inputsDisabled}
                                 />
                             </div>
                             <div className="input-group">
@@ -332,15 +410,18 @@ const Home = () => {
                                     placeholder="City"
                                     className="info-input"
                                     onChange={handleInputChange}
+                                    disabled={inputsDisabled}
                                 />
                             </div>
                         </div>
 
 
                         <p className="total-price-label">Total Price: ${totalPrice}</p>
-                        <button onClick={handlePayPalButtonClick} className="paypal-button">
+                        {isFormValid() &&
+                        <button onClick={handlePayPalButtonClick} className="paypal-button" disabled={!isFormValid()}>
                             Generate Checkout
                         </button>
+                        }
                     </>
                 )}
             </div>

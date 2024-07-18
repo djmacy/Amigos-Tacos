@@ -10,7 +10,7 @@
 
 .section-label {
     font-weight: 600;
-    text-align: center;
+
 }
 
 .food-card img {
@@ -42,7 +42,7 @@
 }
 
 .contact-select {
-    margin-top: 1em;
+    margin-top: 0.5em;
     font-family: "Arapey", Serif;
 }
 

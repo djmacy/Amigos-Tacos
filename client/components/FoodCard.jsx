@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './FoodCard.css';
 import Select from 'react-select';
 
-const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSameToppings, maxQuantity, price, onQuantityChange, onOnionsChange, onCilantroChange, onMeatChoiceChange, onSameToppingsChange, cardIndex }) => {
+const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSameToppings, maxQuantity, price, onQuantityChange, onOnionsChange, onCilantroChange, onMeatChoiceChange, onSameToppingsChange, cardIndex, inputsDisabled }) => {
     const [priceCalc, setPriceCalc] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const [sameToppings, setSameToppings] = useState(hasSameToppings);
@@ -185,7 +185,6 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                 <div>
                     <div className="food-toppings">
                         <label className="section-label">Meat:</label>
-
                         <label>
                             <input
                                 type="radio"
@@ -193,9 +192,9 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                                 value="birria"
                                 checked={meatSelections[0] === 'birria'}
                                 onChange={(event) => handleMeatChange(0, event)}
+                                disabled={inputsDisabled} // Disable input if inputsDisabled is true
                             />
                             Birria
-
                         </label>
                         <label>
                             <input
@@ -204,6 +203,7 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                                 value="birria-no-cheese"
                                 checked={meatSelections[0] === 'birria-no-cheese'}
                                 onChange={(event) => handleMeatChange(0, event)}
+                                disabled={inputsDisabled} // Disable input if inputsDisabled is true
                             />
                             Birria no cheese
                         </label>
@@ -214,22 +214,34 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                                 value="carne-asada"
                                 checked={meatSelections[0] === 'carne-asada'}
                                 onChange={(event) => handleMeatChange(0, event)}
+                                disabled={inputsDisabled} // Disable input if inputsDisabled is true
                             />
                             Carne Asada
                         </label>
                     </div>
                     <div className="food-toppings">
                         <label className="section-label">Toppings:</label>
-                            <label>
-                                Cilantro:
-                                <input type="checkbox" name={`cilantro-${cardIndex}`} checked={cilantro[0]} onChange={(event) => handleCilantroChange(0, event)} />
-                            </label>
-                            <label>
-                                Onions:
-                                <input type="checkbox" name={`onions-${cardIndex}`} checked={onions[0]} onChange={(event) => handleOnionsChange(0, event)} />
-                            </label>
+                        <label>
+                            Cilantro:
+                            <input
+                                type="checkbox"
+                                name={`cilantro-${cardIndex}`}
+                                checked={cilantro[0]}
+                                onChange={(event) => handleCilantroChange(0, event)}
+                                disabled={inputsDisabled} // Disable input if inputsDisabled is true
+                            />
+                        </label>
+                        <label>
+                            Onions:
+                            <input
+                                type="checkbox"
+                                name={`onions-${cardIndex}`}
+                                checked={onions[0]}
+                                onChange={(event) => handleOnionsChange(0, event)}
+                                disabled={inputsDisabled} // Disable input if inputsDisabled is true
+                            />
+                        </label>
                     </div>
-
                 </div>
             )}
             {!sameToppings && quantity > 1 && (
@@ -237,6 +249,7 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                     {Array.from({ length: quantity }).map((_, index) => renderToppings(index))}
                 </>
             )}
+            <label className="section-label">Quantity:</label>
             <Select
                 name="quantity"
                 isClearable={true}
@@ -246,12 +259,19 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                 classNamePrefix="select"
                 value={quantityList.find(option => option.value === quantity.toString())}
                 onChange={quantityChange}
+                isDisabled={inputsDisabled} // Disable Select if inputsDisabled is true
             />
             <div className="same-toppings">
                 {quantity > 1 ?
                     <label>
                         Same toppings:
-                        <input type="checkbox" name={`same-toppings-${cardIndex}`} checked={sameToppings} onChange={handleSameToppingsChange} />
+                        <input
+                            type="checkbox"
+                            name={`same-toppings-${cardIndex}`}
+                            checked={sameToppings}
+                            onChange={handleSameToppingsChange}
+                            disabled={inputsDisabled} // Disable input if inputsDisabled is true
+                        />
                     </label>
                     : null}
             </div>

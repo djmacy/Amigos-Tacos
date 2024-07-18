@@ -1,3 +1,36 @@
+/* Ensure these styles only apply to the salsa checkboxes */
+/* Ensure these styles only apply to the salsa checkboxes */
+.salsa-container {
+    display: flex;
+    flex-direction: row; /* Arrange checkboxes in a row */
+    justify-content: center; /* Center the checkboxes horizontally */
+    align-items: center; /* Center the checkboxes vertically */
+    gap: 20px; /* Optional: add some space between the checkboxes */
+}
+
+.salsa-container .checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0; /* Remove margin-bottom to keep them on the same row */
+}
+
+.salsa-container label {
+    display: flex;
+    align-items: center; /* Center the label and checkbox vertically */
+    text-align: left; /* Align the text to the left */
+    margin: 0 10px; /* Optional: add some margin for spacing around the label */
+}
+
+
+/* General styles for the form */
+.detail-label {
+    font-weight: 600;
+    display: block; /* Ensures labels and inputs are on separate lines */
+    margin-bottom: 0.4em; /* Adds spacing between each label */
+    text-align: center;
+
+}
+
 .order-label {
     justify-content: center;
     text-align: center;
@@ -9,7 +42,7 @@
 
 .info-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* Maintain row layout for personal info inputs */
     justify-content: center; /* Adjust spacing between inputs */
     align-items: center; /* Vertically center the inputs */
     gap: 10px; /* Optional: add some gap between inputs */
@@ -24,7 +57,7 @@
 .input-group label {
     align-self: flex-start; /* Align the label to the start of the column */
     margin-bottom: 0; /* Remove margin at the bottom */
-    margin-left: 5px
+    margin-left: 5px;
 }
 
 .info-input {
@@ -62,39 +95,22 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
 }
 
-
 .additional-info-label {
     display: block; /* Make each label start on a new line */
     margin-bottom: 5px; /* Add space below each label */
-
-}
-
-.total-price .salsa-container {
-    display: flex;
-    justify-content: space-between; /* Ensure space between the checkboxes */
-    margin-left: 25px;
-    margin-right: 25px;
+    text-align: left;
+    margin-left: 5px;
 }
 
 .contact-select-coke {
+    margin-top: 0.1em;
+    font-family: "Arapey", Serif;
     text-align: left;
-    font-family: "Arapey", serif;
-    width: 100%;
-    display: flex;
-    justify-content: left; /* Center the content horizontally */
-    margin-bottom: 5px;
-}
-
-.total-price .salsa-container label {
-    display: flex;
-    align-items: center;
 }
 
 .total-price select, .total-price input[type="checkbox"] {
     margin-left: 5px; /* Optional: add some space between label text and input elements */
-
 }
-
 
 .pay-pal-buttons-home {
     padding-top: 100px;
@@ -112,3 +128,5 @@
     gap: 1em; /* Add space between the food cards */
     padding: 1em;
 }
+
+
