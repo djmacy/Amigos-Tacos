@@ -1,10 +1,16 @@
 .orders {
-    padding-top: 100px;
-    display: flex;
-    flex-direction: column; /* Ensure flex container is in column direction */
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    padding: 20px;
+    margin-top: 200px;
+}
+
+.order-details {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.item-details {
+    padding-left: 20px;
 }
 
 .order-list {

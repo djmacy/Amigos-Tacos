@@ -16,6 +16,7 @@ const Home = () => {
     const [salsaRojo, setSalsaRojo] = useState(true);
     const [customer, setCustomer] = useState({});
     const [mexicanCokes, setMexicanCokes] = useState(0); // State for Mexican Cokes quantity
+    const [waters, setWaters] = useState(0); // State for Mexican Cokes quantity
     const cokePrice = 2;
     const waterPrice = 1;
     const [inputsDisabled, setInputsDisabled] = useState(false);
@@ -100,6 +101,7 @@ const Home = () => {
             hasSalsaVerde: salsaVerde ? 'Yes' : 'No',
             hasSalsaRojo: salsaRojo ? 'Yes' : 'No',
             mexicanCokes: mexicanCokes,
+            waters: waters,
             totalPrice: totalPrice.toFixed(2),
             items: items,
             customer: customer
@@ -208,6 +210,25 @@ const Home = () => {
         const cokePriceAdjustment = newQuantity * cokePrice;
         setTotalPrice(prevTotalPrice => prevTotalPrice + cokePriceAdjustment - oldPrice);
         setMexicanCokes(newQuantity);
+    };
+
+    const handleWaterChange = (event) => {
+
+        if (!event) {
+            const newQuantity = 0;
+            const oldPrice = waters * waterPrice
+            const waterPriceAdjustment = 0;
+            setTotalPrice(prevTotalPrice => prevTotalPrice + waterPriceAdjustment - oldPrice);
+            setWaters(newQuantity);
+            return
+        }
+        //console.log(event.value);
+        const newQuantity = parseInt(event.value);
+
+        const oldPrice = waters * waterPrice
+        const waterPriceAdjustment = newQuantity * waterPrice;
+        setTotalPrice(prevTotalPrice => prevTotalPrice + waterPriceAdjustment - oldPrice);
+        setWaters(newQuantity);
     };
 
 
@@ -324,7 +345,7 @@ const Home = () => {
                                     className="contact-select-coke"
                                     classNamePrefix="select"
                                     value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
-                                    onChange={handleMexicanCokesChange}
+                                    onChange={handleWaterChange}
                                     isDisabled={inputsDisabled}
                                 />
                             </div>

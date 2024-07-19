@@ -34,8 +34,8 @@ export async function insertOrder(orderDetails) {
 
         // Insert into orders table with customer_id
         const [orderResult] = await connection.query(
-            "INSERT INTO orders (is_delivery, is_ready, has_salsa_verde, has_salsa_rojo, mexican_cokes, total_price, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [orderDetails.isDelivery, orderDetails.isReady, orderDetails.hasSalsaVerde, orderDetails.hasSalsaRojo, orderDetails.mexicanCokes, orderDetails.totalPrice, customerId]
+            "INSERT INTO orders (is_delivery, is_ready, has_salsa_verde, has_salsa_rojo, mexican_cokes, waters, total_price, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [orderDetails.isDelivery, orderDetails.isReady, orderDetails.hasSalsaVerde, orderDetails.hasSalsaRojo, orderDetails.mexicanCokes, orderDetails.waters, orderDetails.totalPrice, customerId]
         );
         const orderId = orderResult.insertId; // Get the order_id of the newly inserted order
 
@@ -72,20 +72,37 @@ export async function getFoodDetails(orderId) {
         // Execute the SQL query to retrieve order details
         const [rows] = await pool.query(`
             SELECT 
-                o.id AS id,
-                i.name AS item_name,
-                oi.quantity AS quantity,
-                t.has_cilantro AS has_cilantro,
-                t.has_onion AS has_onion,
-                t.meat AS meat
+                o.id AS order_id,
+                o.waters,
+                o.mexican_cokes,
+                o.has_salsa_rojo,
+                o.has_salsa_verde,
+                o.is_delivery,
+                i.name AS item_name, 
+                oi.quantity AS quantity, 
+                t.has_cilantro AS has_cilantro, 
+                t.has_onion AS has_onion, 
+                t.meat AS meat,
+                c.name AS customer_name,
+                c.phone AS customer_phone,
+                c.email AS customer_email,
+                c.address AS customer_address,
+                c.city AS customer_city
             FROM 
                 order_items oi
             JOIN 
                 items i ON oi.item_id = i.id
             JOIN 
                 toppings t ON oi.topping_id = t.id
+            JOIN 
+                orders o ON oi.order_id = o.id
+            JOIN 
+                customer c ON o.customer_id = c.id
             WHERE 
                 oi.order_id = ?
+
+
+
         `, [orderId]);
 
         return rows; // Return the retrieved order details
