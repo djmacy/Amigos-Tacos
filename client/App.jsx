@@ -20,7 +20,7 @@ const App = () => {
                     <h1>Amigos Tacos</h1>
                 </div>
             </div>
-            <Navbar />
+            { /*<Navbar />*/}
             <RoutesComponent />
             <Footer />
         </>

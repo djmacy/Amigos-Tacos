@@ -3,7 +3,14 @@ import "dotenv/config";
 import path from "path";
 
 import { generateClientToken, createOrder, captureOrder } from './services/paypal.js';
-import { getTodaysOrders, insertOrder, getFoodDetails, getOrderDetails, authenticateUser } from './services/database.js';
+import {
+  getTodaysNonCompletedOrders,
+  insertOrder,
+  getFoodDetails,
+  getOrderDetails,
+  authenticateUser,
+  updateOrderReadyStatus, getTodaysCompletedOrders
+} from './services/database.js';
 
 const PORT = process.env.PORT || 8888;
 const base = "https://api-m.sandbox.paypal.com";
@@ -23,9 +30,18 @@ app.get("/", (req, res) => {
  * DB RESTFUL
  */
 // Example route to use the database functions directly
-app.get("/api/todays-orders", async (req, res) => {
+app.get("/api/todays-non-completed-orders", async (req, res) => {
   try {
-    const orders = await getTodaysOrders();
+    const orders = await getTodaysNonCompletedOrders();
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/todays-completed-orders", async (req, res) => {
+  try {
+    const orders = await getTodaysCompletedOrders();
     res.json(orders);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -39,6 +55,21 @@ app.post("/api/create-order", async (req, res) => {
     res.status(201).json({ orderId });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/update-order-ready", async (req, res) => {
+  const {orderId} = req.body;
+
+  if (!orderId) {
+    return res.status(400).send('Order ID is required');
+  }
+
+  try {
+    const result = await updateOrderReadyStatus(orderId);
+    res.status(200).json({message: "Order ready status updated successfully", result});
+  } catch (error) {
+    res.status(500).json({message: 'Error updating order ready status', error});
   }
 });
 

@@ -13,6 +13,29 @@
     padding-left: 20px;
 }
 
+.order-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Optional: Adds space between the items */
+    margin-top: 10px; /* Optional: Adds space above the items */
+}
+
+.order-items li {
+    flex: 1 1 calc(40% - 10px); /* Adjusts the item width to take up 50% of the container's width minus the gap */
+    list-style-type: none; /* Removes default list styling */
+    background-color: #f9f9f9; /* Optional: Adds a background color to items */
+    padding: 7px; /* Optional: Adds padding to items */
+    border-radius: 5px; /* Optional: Adds rounded corners to items */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow to items */
+    font-family: "Arapey", Serif;
+}
+
+@media screen and (max-width: 333px) {
+    .order-items li {
+        padding: 1px;
+    }
+}
+
 .order-list {
     list-style-type: none; /* Remove bullet points */
     padding: 0;
@@ -25,4 +48,14 @@
 .order-list li {
     margin: 10px 0; /* Add space between list items */
     font-size: 18px; /* Customize as needed */
+}
+
+.order-completed-row {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Optional: adds some space above the row */
+}
+
+.completed-confirmation {
+    width: 200px
 }

@@ -9,9 +9,20 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise();
 
-export async function getTodaysOrders() {
+export async function getTodaysNonCompletedOrders() {
     try {
-        const [rows] = await pool.query("SELECT * FROM orders WHERE DATE(time_ordered) = CURDATE()");
+        const [rows] = await pool.query("SELECT * FROM orders WHERE DATE(time_ordered) = CURDATE() and orders.is_ready = 'No'");
+        return rows;
+    } catch (error) {
+        // Handle any errors
+        console.error("Error fetching orders:", error);
+        throw error;
+    }
+}
+
+export async function getTodaysCompletedOrders() {
+    try {
+        const [rows] = await pool.query("SELECT * FROM orders WHERE DATE(time_ordered) = CURDATE() and orders.is_ready = 'Yes'");
         return rows;
     } catch (error) {
         // Handle any errors
@@ -146,8 +157,6 @@ export async function getTodaysFoodDetails() {
     }
 }
 
-
-
 export async function getOrderDetails(orderId) {
     try {
         // Execute the SQL query to retrieve order details
@@ -200,6 +209,17 @@ export async function authenticateUser(credentials) {
     } catch (error) {
         // Handle any errors
         console.error("Error authenticating user:", error);
+        throw error;
+    }
+}
+
+export async function updateOrderReadyStatus(orderId) {
+    try {
+        const [result] = await pool.query("UPDATE orders SET is_ready = 'Yes' WHERE id = ?", [orderId]);
+        return result;
+    } catch (error) {
+        // Handle any errors
+        console.error("Error updating order ready status:", error);
         throw error;
     }
 }
@@ -277,8 +297,8 @@ insertOrder(orderDetails).then(orderId => {
 //const getOrderItems = await getOrderDetails(12);
 //const getFoodItems = await getFoodDetails(12)
 //const getTodayOrders = await getTodaysOrders();
-const getTodaysFoodItems = await getTodaysFoodDetails();
-console.log(getTodaysFoodItems)
+//const getTodaysFoodItems = await getTodaysFoodDetails();
+//console.log(getTodaysFoodItems)
 
 //console.log(orders);
 //console.log(insertOrders);
