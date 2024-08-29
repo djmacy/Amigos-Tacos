@@ -1,6 +1,7 @@
 // Import Twilio module
 import twilio from 'twilio';
 import dotenv from 'dotenv';
+//require(dotenv);
 dotenv.config();
 // Your Twilio account SID and auth token from twilio.com/console
 const accountSid = process.env.ACCOUNT_SID;
@@ -12,7 +13,7 @@ async function sendSms(to, message) {
     try {
         const messageInstance = await client.messages.create({
             body: message,
-            from: '+18554840809', // Your Twilio phone number
+            from: '+14064307172', // Your Twilio phone number
             to: to
         });
 

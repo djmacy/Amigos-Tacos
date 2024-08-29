@@ -1,3 +1,33 @@
 .thank-you-format {
-    margin-top: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    background: #e3d7c8;
+    /*padding: 20px;*/
+    text-align: center;
+}
+
+.thank-you-format h1 {
+    font-size: 2.5rem;
+    color: #343a40;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.thank-you-format p {
+    font-size: 1.25rem;
+    color: #343a40;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .thank-you-format h1 {
+        font-size: 2rem;
+    }
+
+    .thank-you-format p {
+        font-size: 1rem;
+    }
 }

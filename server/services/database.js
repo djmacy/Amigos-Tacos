@@ -296,10 +296,10 @@ insertOrder(orderDetails).then(orderId => {
 //const insertOrders = await insertOrder(orderDetails);
 //const getOrderItems = await getOrderDetails(12);
 //const getFoodItems = await getFoodDetails(12)
-//const getTodayOrders = await getTodaysOrders();
+const getTodayOrders = await getTodaysCompletedOrders();
 //const getTodaysFoodItems = await getTodaysFoodDetails();
 //console.log(getTodaysFoodItems)
 
 //console.log(orders);
 //console.log(insertOrders);
-//console.log(getOrderItems);
+console.log(getTodayOrders);

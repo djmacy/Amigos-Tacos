@@ -94,8 +94,8 @@ async function onApproveCallback(data, actions, cart) {
 
       const orderId = createOrderData.orderId;
 
-      const resultMessage = `Transaction ${transaction.status}. Order ID: ${orderId}. Thank you for your order. We will contact you when your food is ready!`;
-      window.location.assign('/thank-you')
+      const resultMessage = `Transaction ${transaction.status.toLowerCase()}. Order ID: ${orderId}. We will contact you when your food is ready!`;
+      window.location.assign(`/thank-you?message=${encodeURIComponent(resultMessage)}`);
       // Returning the message instead of navigating here
       return resultMessage;
     }

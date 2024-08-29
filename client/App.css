@@ -82,3 +82,39 @@ h1, h2, h3, p, label {
     text-align: center;
     animation: scaleAndAdjustPosition 1s forwards; /* Use the combined animation */
 }
+
+@media (max-height: 750px) {
+    #overlay .logo-container img {
+        max-width: 50%; /* Adjust the size as needed */
+        max-height: 40%; /* Adjust the size as needed */
+    }
+
+    #overlay .logo-container h1 {
+        font-family: "Arapey", serif;
+        font-weight: 800;
+        font-style: normal;
+        font-size: 50px;
+        margin: 0px;
+        color: #eebd7d;
+        text-align: center;
+        animation: scaleAndAdjustPosition 1s forwards; /* Use the combined animation */
+    }
+}
+
+@media (max-height: 600px) {
+    #overlay .logo-container img {
+        max-width: 50%; /* Adjust the size as needed */
+        max-height: 35%; /* Adjust the size as needed */
+    }
+
+    #overlay .logo-container h1 {
+        font-family: "Arapey", serif;
+        font-weight: 800;
+        font-style: normal;
+        font-size: 45px;
+        margin: 0px;
+        color: #eebd7d;
+        text-align: center;
+        animation: scaleAndAdjustPosition 1s forwards; /* Use the combined animation */
+    }
+}

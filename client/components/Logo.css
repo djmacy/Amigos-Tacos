@@ -48,3 +48,15 @@
     /*padding: 10px; /* Add padding for better clickability */
     /*  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
+/*
+@media (max-height: 750px) {
+    .logo {
+        display: flex;
+        align-items: center;
+        height: 70%;
+    }
+    .logo-below img {
+        height: 50%;
+        align-items: center;
+    }
+}*/

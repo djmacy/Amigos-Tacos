@@ -3,8 +3,8 @@ import "./ThankYou.css";
 
 const ThankYou = () => {
     const location = useLocation();
-    console.log("Location State:", location.state); // Debugging log
-    const { message } = location.state || {}; // Get the message from the state
+    const queryParams = new URLSearchParams(window.location.search);
+    const message = queryParams.get('message'); // Get the message from the query parameters
 
     return (
         <div className="thank-you-format">
