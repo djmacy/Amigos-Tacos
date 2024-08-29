@@ -67,7 +67,7 @@ export async function insertOrder(orderDetails) {
         }
 
         await connection.commit();
-        return orderId; // Return the order_id for reference
+        return {orderId}; // Return the order_id for reference
     } catch (error) {
         await connection.rollback();
         console.error("Error inserting order:", error);

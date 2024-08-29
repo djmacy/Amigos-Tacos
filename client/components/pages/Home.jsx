@@ -6,6 +6,7 @@ import birriaPicture from "../../images/quesabirriaImage.jpg";
 import carneTacoPicture from "../../images/carneAsadaTaco.jpg";
 import foodCard from "../FoodCard.jsx";
 import Select from "react-select";
+import { useNavigate } from 'react-router-dom';
 import styles from "../PaymentForm.module.css";
 
 const Home = () => {
@@ -237,6 +238,7 @@ const Home = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneValid = phoneRegex.test(formValues.phone);
         const emailValid = emailRegex.test(formValues.email);
+
 
         if (phoneValid && emailValid) {
             if (isDelivery) {

@@ -1,5 +1,9 @@
 import { useState, useRef } from "react";
 import styles from "./PaymentForm.module.css";
+import { LoadingOverlay } from './LoadingOverlay';
+import { useNavigate } from 'react-router-dom';
+
+
 
 import {
   PayPalHostedFieldsProvider,
@@ -43,7 +47,6 @@ async function createOrderCallback(cart) {
 }
 
 async function onApproveCallback(data, actions, cart) {
-  console.log("onApproveCallback cart:", cart); // Add this line for debugging
   try {
     const response = await fetch(`/api/orders/${data.orderID}/capture`, {
       method: "POST",
@@ -53,27 +56,19 @@ async function onApproveCallback(data, actions, cart) {
     });
 
     const orderData = await response.json();
-    // Three cases to handle:
-    //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-    //   (2) Other non-recoverable errors -> Show a failure message
-    //   (3) Successful transaction -> Show confirmation or thank you message
 
     const transaction =
         orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
         orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
     const errorDetail = orderData?.details?.[0];
 
-    // this actions.restart() behavior only applies to the Buttons component
-    if (errorDetail?.issue === "INSTRUMENT_DECLINED" && !data.card && actions) {
-      // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-      // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
+    if (errorDetail?.issue === "INSTRUMENT_DECLINED" && actions) {
       return actions.restart();
     } else if (
         errorDetail ||
         !transaction ||
         transaction.status === "DECLINED"
     ) {
-      // (2) Other non-recoverable errors -> Show a failure message
       let errorMessage;
       if (transaction) {
         errorMessage = `Transaction ${transaction.status}: ${transaction.id}`;
@@ -84,101 +79,58 @@ async function onApproveCallback(data, actions, cart) {
       }
       throw new Error(errorMessage);
     } else {
-      // (3) Successful transaction -> Show confirmation or thank you message
-      // Or go to another URL:  actions.redirect('thank_you.html');
-      //console.log(orderData.status);
-      //console.log(orderData)
-      //console.log(transaction.status);
-      //console.log(transaction);
-      //console.log()
-      // Extract order details from orderData
-
-    /*  const orderDetails = {
-        isDelivery: 'Yes',
-        isReady: 'No',
-        hasSalsaVerde: 'Yes',
-        hasSalsaRojo: 'No',
-        mexicanCokes: 2,
-        totalPrice: 24.95,
-        items: [
-          {
-            itemId: 1, // Quesabirria
-            quantity: 1,
-            hasCilantro: 'Yes',
-            hasOnion: 'Yes',
-            meat: 'birria'
-          },
-          {
-            itemId: 1, // Quesabirria with cheese
-            quantity: 1,
-            hasCilantro: 'Yes',
-            hasOnion: 'Yes',
-            meat: 'birria with cheese'
-          },
-          {
-            itemId: 3, // Loko Taco
-            quantity: 1,
-            hasCilantro: 'No',
-            hasOnion: 'Yes',
-            meat: 'carne asada'
-          }
-        ]
-      };*/
-
-      // Send order details to the backend
       const createOrderResponse = await fetch('/api/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ orderDetails: cart} ),
+        body: JSON.stringify({ orderDetails: cart }),
       });
-      console.log("From Payment" + cart);
-      //console.log(orderDetails);
 
       const createOrderData = await createOrderResponse.json();
       if (!createOrderResponse.ok) {
         throw new Error(`Order creation failed: ${createOrderData.error}`);
       }
 
-      console.log(`Order ID: ${createOrderData.orderId}`);
+      const orderId = createOrderData.orderId;
 
-      return `Transaction ${transaction.status}: ${transaction.id}. Order ID: ${createOrderData.orderId}. See console for all available details`;
+      const resultMessage = `Transaction ${transaction.status}. Order ID: ${orderId}. Thank you for your order. We will contact you when your food is ready!`;
+      window.location.assign('/thank-you')
+      // Returning the message instead of navigating here
+      return resultMessage;
     }
   } catch (error) {
     return `Sorry, your transaction could not be processed...${error}`;
   }
 }
 
-
-const SubmitPayment = ({ onHandleMessage, cart }) => {
-  // Here declare the variable containing the hostedField instance
+const SubmitPayment = ({ onHandleMessage, cart, setLoading }) => {
   const { cardFields } = usePayPalHostedFields();
   const cardHolderName = useRef(null);
 
   const submitHandler = () => {
-    if (typeof cardFields.submit !== "function") return; // validate that \`submit()\` exists before using it
-    //if (errorMsg) showErrorMsg(false);
+    if (typeof cardFields.submit !== "function") return; // validate that `submit()` exists before using it
+    setLoading(true);
     cardFields
-      .submit({
-        // The full name as shown in the card and billing addresss
-        // These fields are optional for Sandbox but mandatory for production integration
-        cardholderName: cardHolderName?.current?.value,
-      })
-      .then(async (data) => onHandleMessage(await onApproveCallback(data, undefined, cart)))
-      .catch((orderData) => {
-        onHandleMessage(
-          `Sorry, your transaction could not be processed...${JSON.stringify(
-            orderData,
-          )}`,
-        );
-      });
+        .submit({
+          cardholderName: cardHolderName?.current?.value,
+        })
+        .then(async (data) => {
+          await onHandleMessage(await onApproveCallback(data, undefined, cart));
+          setLoading(false);
+        })
+        .catch((orderData) => {
+          onHandleMessage(
+              `Sorry, your transaction could not be processed...${JSON.stringify(orderData)}`,
+          );
+          setLoading(false);
+        });
   };
 
   return (
-    <button onClick={submitHandler} className="btn btn-primary">
-      Pay
-    </button>
+      <button onClick={submitHandler} className="btn btn-primary">
+        Pay
+      </button>
   );
 };
 
@@ -188,21 +140,27 @@ const Message = ({ content }) => {
 
 export const PaymentForm = ({ cart }) => {
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleApprove = async (data) => {
-    console.log("handleApprove cart:", cart); // Add this line for debugging
     const resultMessage = await onApproveCallback(data, undefined, cart);
+    setLoading(false);
     setMessage(resultMessage);
+
+
+      //navigate('/thank-you')
+
   };
 
   return (
+
       <div className={styles.form}>
         <PayPalButtons
             style={{
               shape: "rect",
               layout: "vertical",
             }}
-            styles={{ marginTop: "4px", marginBottom: "4px" }}
             createOrder={() => createOrderCallback(cart)}
             onApprove={handleApprove}
         />
@@ -252,10 +210,12 @@ export const PaymentForm = ({ cart }) => {
                   className={styles.input}
               />
             </div>
-            <SubmitPayment onHandleMessage={setMessage} cart={cart} />
+            <SubmitPayment onHandleMessage={setMessage} cart={cart} setLoading={setLoading} />
           </div>
         </PayPalHostedFieldsProvider>
         <Message content={message} />
+        {loading && <LoadingOverlay />}
+
       </div>
   );
 };
