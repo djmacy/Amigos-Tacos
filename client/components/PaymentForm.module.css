@@ -1,19 +1,23 @@
 .container {
     display: flex;
-    min-width: 200px;
     justify-content: center;
     text-align: center;
     align-items: center;
     /*margin-left: 20px;
     margin-right: 20px;*/
+    font-family: "Arapey", serif;
+
 }
 
 .paypal {
    margin: 8px 0;
+    font-family: "Arapey", serif;
+
 }
 
 .form {
     width: 30%;
+    font-family: "Arapey", serif;
 }
   
 .input{
@@ -26,9 +30,9 @@
     resize: vertical;
     height: 40px;
     background: white;
-    font-size: 14px;
+    font-size: 13px;
     color: #3a3a3a;
-    font-family: "Arapey", serif;
+    font-family: sans-serif, serif;
 }
 
 button {
@@ -48,7 +52,15 @@ button:hover {
     background-color: #222;
 }
 
-@media (max-width: 400px) {}
-.form {
-    width: 80%;
+@media (max-width: 400px) {
+    .form {
+        width: 100%;
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 850px) {
+    .form {
+        width: 60%;
+    }
 }

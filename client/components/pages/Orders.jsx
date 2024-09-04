@@ -152,12 +152,16 @@ const Orders = () => {
                                         <p><strong>Customer Name:</strong> {order.details[0].customer_name}</p>
                                         <p><strong>Phone:</strong> {order.details[0].customer_phone}</p>
                                         <p><strong>Email:</strong> {order.details[0].customer_email}</p>
-                                        <p><strong>Address:</strong> {order.details[0].customer_address}, {order.details[0].customer_city}</p>
+                                        <p>
+                                            <strong>Address:</strong> {order.details[0].customer_address}, {order.details[0].customer_city}
+                                        </p>
                                         <p><strong>Is Delivery:</strong> {order.is_delivery}</p>
                                         <p><strong>Has Salsa Verde:</strong> {order.has_salsa_verde}</p>
                                         <p><strong>Has Salsa Rojo:</strong> {order.has_salsa_rojo}</p>
                                         <p><strong>Mexican Cokes:</strong> {order.mexican_cokes}</p>
                                         <p><strong>Waters:</strong> {order.waters}</p>
+                                        <p><strong>Horchatas:</strong> {order.horchata}</p>
+                                        <p><strong>Jamaicas:</strong> {order.jamaica}</p>
                                         <h3>Items:</h3>
                                         <ul className="order-items">
                                             {order.details.map((item, index) => (

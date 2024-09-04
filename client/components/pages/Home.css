@@ -46,6 +46,7 @@
     justify-content: center; /* Adjust spacing between inputs */
     align-items: center; /* Vertically center the inputs */
     gap: 10px; /* Optional: add some gap between inputs */
+    margin-top: 5px;
 }
 
 .input-group {
@@ -115,6 +116,7 @@
 .pay-pal-buttons-home {
     padding-top: 50px;
     /*margin-left: -30px;*/
+    /*min-width: 300px;*/
     /*width: 100%;*/
     display: flex;
     justify-content: center;
@@ -129,6 +131,12 @@
     align-items: flex-start; /* Align items to the top of the container */
     gap: 1em; /* Add space between the food cards */
     padding: 1em;
+}
+
+.required-asterisk {
+    color: red;
+    margin-right: 3px; /* Adds some space between the asterisk and the label */
+    font-weight: bold;
 }
 
 

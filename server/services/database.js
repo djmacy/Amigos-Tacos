@@ -45,8 +45,8 @@ export async function insertOrder(orderDetails) {
 
         // Insert into orders table with customer_id
         const [orderResult] = await connection.query(
-            "INSERT INTO orders (is_delivery, is_ready, has_salsa_verde, has_salsa_rojo, mexican_cokes, waters, total_price, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            [orderDetails.isDelivery, orderDetails.isReady, orderDetails.hasSalsaVerde, orderDetails.hasSalsaRojo, orderDetails.mexicanCokes, orderDetails.waters, orderDetails.totalPrice, customerId]
+            "INSERT INTO orders (is_delivery, is_ready, has_salsa_verde, has_salsa_rojo, mexican_cokes, waters, horchata, jamaica, total_price, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [orderDetails.isDelivery, orderDetails.isReady, orderDetails.hasSalsaVerde, orderDetails.hasSalsaRojo, orderDetails.mexicanCokes, orderDetails.waters, orderDetails.horchata, orderDetails.jamaica, orderDetails.totalPrice, customerId]
         );
         const orderId = orderResult.insertId; // Get the order_id of the newly inserted order
 
@@ -67,7 +67,7 @@ export async function insertOrder(orderDetails) {
         }
 
         await connection.commit();
-        return {orderId}; // Return the order_id for reference
+        return { orderId }; // Return the order_id for reference
     } catch (error) {
         await connection.rollback();
         console.error("Error inserting order:", error);
@@ -76,6 +76,7 @@ export async function insertOrder(orderDetails) {
         connection.release();
     }
 }
+
 
 
 export async function getFoodDetails(orderId) {

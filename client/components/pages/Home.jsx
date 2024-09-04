@@ -20,9 +20,11 @@ const Home = () => {
     const [mexicanCokes, setMexicanCokes] = useState(0); // State for Mexican Cokes quantity
     const [waters, setWaters] = useState(0); // State for Mexican Cokes quantity
     const [horchata, setHorchata] = useState(0); // State for Mexican Cokes quantity
+    const [jamaica, setJamaica] = useState(0); // State for Mexican Cokes quantity
     const cokePrice = 2;
     const waterPrice = 1;
     const horchataPrice = 2;
+    const jamaicaPrice = 2;
     const [inputsDisabled, setInputsDisabled] = useState(false);
     const [formValues, setFormValues] = useState({
         name: '',
@@ -106,6 +108,8 @@ const Home = () => {
             hasSalsaRojo: salsaRojo ? 'Yes' : 'No',
             mexicanCokes: mexicanCokes,
             waters: waters,
+            horchata: horchata,
+            jamaica: jamaica,
             totalPrice: totalPrice.toFixed(2),
             items: items,
             customer: customer
@@ -233,6 +237,25 @@ const Home = () => {
         const horchataPriceAdjustment = newQuantity * horchataPrice;
         setTotalPrice(prevTotalPrice => prevTotalPrice + horchataPriceAdjustment - oldPrice);
         setHorchata(newQuantity);
+    };
+
+    const handleJamaicaChange = (event) => {
+
+        if (!event) {
+            const newQuantity = 0;
+            const oldPrice = jamaica * jamaicaPrice
+            const jamaicaPriceAdjustment = 0;
+            setTotalPrice(prevTotalPrice => prevTotalPrice + jamaicaPriceAdjustment - oldPrice);
+            setJamaica(newQuantity);
+            return
+        }
+        //console.log(event.value);
+        const newQuantity = parseInt(event.value);
+
+        const oldPrice = jamaica * jamaicaPrice
+        const jamaicaPriceAdjustment = newQuantity * jamaicaPrice;
+        setTotalPrice(prevTotalPrice => prevTotalPrice + jamaicaPriceAdjustment - oldPrice);
+        setJamaica(newQuantity);
     };
 
     const handleWaterChange = (event) => {
@@ -373,6 +396,37 @@ const Home = () => {
                                     isDisabled={inputsDisabled}
                                 />
                             </div>
+
+                        </div>
+                        <div className="info-container">
+                            <div className="input-group">
+                                <label>Horchatas:</label>
+                                <Select
+                                    name="horchata-quantity"
+                                    isClearable={true}
+                                    placeholder="Horchata"
+                                    options={mexicanCokesQuant}
+                                    className="contact-select-coke"
+                                    classNamePrefix="select"
+                                    value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
+                                    onChange={handleHorchataChange}
+                                    isDisabled={inputsDisabled}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Jamaicas:</label>
+                                <Select
+                                    name="horchata-quantity"
+                                    isClearable={true}
+                                    placeholder="Jamaica"
+                                    options={mexicanCokesQuant}
+                                    className="contact-select-coke"
+                                    classNamePrefix="select"
+                                    value={mexicanCokesQuant.find(option => option.value === mexicanCokesQuant.toString())}
+                                    onChange={handleJamaicaChange}
+                                    isDisabled={inputsDisabled}
+                                />
+                            </div>
                         </div>
                         <h2 className="detail-label">Salsas</h2>
                         {/*<p className="detail-label">Salsas</p>*/}
@@ -380,13 +434,15 @@ const Home = () => {
                             <div className="checkbox-group">
                                 <label>
                                     Salsa Verde:
-                                    <input type="checkbox" name="salsaVerde" checked={salsaVerde} onChange={handleSalsaVerdeChange}  disabled={inputsDisabled}/>
+                                    <input type="checkbox" name="salsaVerde" checked={salsaVerde}
+                                           onChange={handleSalsaVerdeChange} disabled={inputsDisabled}/>
                                 </label>
                             </div>
                             <div className="checkbox-group">
                                 <label>
                                     Salsa Rojo:
-                                    <input type="checkbox" name="salsaRojo" checked={salsaRojo} onChange={handleSalsaRojoChange}  disabled={inputsDisabled}/>
+                                    <input type="checkbox" name="salsaRojo" checked={salsaRojo}
+                                           onChange={handleSalsaRojoChange} disabled={inputsDisabled}/>
                                 </label>
                             </div>
                         </div>
@@ -394,13 +450,17 @@ const Home = () => {
                         {/*<p className="detail-label">Delivery</p>*/}
                         <label>
                             Deliver My Food:
-                            <input type="checkbox" name="delivery" checked={isDelivery} onChange={handleDeliveryChange}  disabled={inputsDisabled}/>
+                            <input type="checkbox" name="delivery" checked={isDelivery} onChange={handleDeliveryChange}
+                                   disabled={inputsDisabled}/>
                         </label>
                         <h2 className="detail-label">Personal Information</h2>
                         <div className="info-container">
 
                             <div className="input-group">
-                                <label>Preferred Name:</label>
+                                <label>
+                                    <span className="required-asterisk">*</span>
+                                    Preferred Name:
+                                </label>
                                 <input
                                     id="name"
                                     type="text"
@@ -411,7 +471,10 @@ const Home = () => {
                                 />
                             </div>
                             <div className="input-group">
-                                <label>Phone Number:</label>
+                                <label>
+                                    <span className="required-asterisk">*</span>
+                                    Phone Number:
+                                </label>
                                 <input
                                     id="phone"
                                     type="text"
@@ -424,7 +487,10 @@ const Home = () => {
                         </div>
                         <div className="info-container">
                             <div className="input-group">
-                                <label>Email:</label>
+                                <label>
+                                    <span className="required-asterisk">*</span>
+                                    Email:
+                                </label>
                                 <input
                                     id="email"
                                     type="text"
@@ -437,7 +503,10 @@ const Home = () => {
                         </div>
                         <div className="info-container">
                             <div className="input-group">
-                                <label>Street Address:</label>
+                                <label>
+                                    <span className="required-asterisk">*</span>
+                                    Street Address:
+                                </label>
                                 <input
                                     id="address"
                                     type="text"
@@ -448,7 +517,10 @@ const Home = () => {
                                 />
                             </div>
                             <div className="input-group">
-                                <label>City:</label>
+                                <label>
+                                    <span className="required-asterisk">*</span>
+                                    City:
+                                </label>
                                 <input
                                     id="city"
                                     type="text"
@@ -463,15 +535,16 @@ const Home = () => {
 
                         <p className="total-price-label">Total Price: ${totalPrice}</p>
                         {isFormValid() &&
-                        <button onClick={handlePayPalButtonClick} className="paypal-button" disabled={!isFormValid()}>
-                            Generate Checkout
-                        </button>
+                            <button onClick={handlePayPalButtonClick} className="paypal-button"
+                                    disabled={!isFormValid()}>
+                                Generate Checkout
+                            </button>
                         }
                     </>
                 )}
             </div>
             <div className="pay-pal-buttons-home">
-                {totalPrice > 0 && paypalButtonTrigger ? <PayPalButtons cart={cart} /> : null}
+                {totalPrice > 0 && paypalButtonTrigger ? <PayPalButtons cart={cart}/> : null}
             </div>
         </div>
     );
