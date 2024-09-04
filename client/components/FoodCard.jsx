@@ -129,84 +129,99 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
         <div key={index}>
             <div className="food-toppings">
                 <label className="section-label">Meat:</label>
-                <label>
-                    <input
-                        type="radio"
-                        name={`meat-${cardIndex}-${index}`}
-                        value="birria"
-                        checked={meatSelections[index] === 'birria'}
-                        onChange={(event) => handleMeatChange(index, event)}
-                    />
-                    Birria
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name={`meat-${cardIndex}-${index}`}
-                        value="birria-no-cheese"
-                        checked={meatSelections[index] === 'birria-no-cheese'}
-                        onChange={(event) => handleMeatChange(index, event)}
-                    />
-                    Birria no cheese
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name={`meat-${cardIndex}-${index}`}
-                        value="carne-asada"
-                        checked={meatSelections[index] === 'carne-asada'}
-                        onChange={(event) => handleMeatChange(index, event)}
-                    />
-                    Carne Asada
-                </label>
-            </div>
-            <div className="food-toppings">
-                <label className="section-label">Toppings:</label>
-
-                <label>
-                        Cilantro:
-                        <input type="checkbox" name={`cilantro-${cardIndex}-${index}`} checked={cilantro[index]} onChange={(event) => handleCilantroChange(index, event)}/>
-                    </label>
-                    <label>
-                        Onions:
-                        <input type="checkbox" name={`onions-${cardIndex}-${index}`} checked={onions[index]} onChange={(event) => handleOnionsChange(index, event)} />
-                    </label>
-            </div>
-
-            {index < quantity - 1 && <hr />}
-        </div>
-    );
-
-    return (
-        <div className="food-card">
-            <h3>{title}</h3>
-            <img src={imageUrl} alt={title} />
-            {sameToppings && quantity !== 0 && (
-                <div>
-                    <div className="food-toppings">
-                        <label className="section-label">Meat:</label>
+                {cardIndex === 0 && (
+                    <>
                         <label>
                             <input
                                 type="radio"
-                                name={`meat-${cardIndex}`}
+                                name={`meat-${cardIndex}-${index}`}
                                 value="birria"
-                                checked={meatSelections[0] === 'birria'}
-                                onChange={(event) => handleMeatChange(0, event)}
-                                disabled={inputsDisabled} // Disable input if inputsDisabled is true
+                                checked={meatSelections[index] === 'birria'}
+                                onChange={(event) => handleMeatChange(index, event)}
                             />
                             Birria
                         </label>
                         <label>
                             <input
                                 type="radio"
-                                name={`meat-${cardIndex}`}
+                                name={`meat-${cardIndex}-${index}`}
                                 value="birria-no-cheese"
-                                checked={meatSelections[0] === 'birria-no-cheese'}
-                                onChange={(event) => handleMeatChange(0, event)}
-                                disabled={inputsDisabled} // Disable input if inputsDisabled is true
+                                checked={meatSelections[index] === 'birria-no-cheese'}
+                                onChange={(event) => handleMeatChange(index, event)}
                             />
                             Birria no cheese
                         </label>
+                    </>
+                )}
+                {cardIndex > 0 && (
+                    <label>
+                        <input
+                            type="radio"
+                            name={`meat-${cardIndex}-${index}`}
+                            value="carne-asada"
+                            disabled = {true}
+                            checked={meatSelections[index] === 'carne-asada'}
+                            onChange={(event) => handleMeatChange(index, event)}
+                        />
+                        Carne Asada
+                    </label>
+                )}
+            </div>
+            <div className="food-toppings">
+                <label className="section-label">Toppings:</label>
+
+                <label>
+                    Cilantro:
+                    <input type="checkbox" name={`cilantro-${cardIndex}-${index}`} checked={cilantro[index]}
+                           onChange={(event) => handleCilantroChange(index, event)}/>
+                </label>
+                <label>
+                    Onions:
+                    <input type="checkbox" name={`onions-${cardIndex}-${index}`} checked={onions[index]}
+                           onChange={(event) => handleOnionsChange(index, event)}/>
+                </label>
+            </div>
+
+            {index < quantity - 1 && <hr/>}
+        </div>
+    );
+
+    return (
+        <div className="food-card">
+            <h3>{title}</h3>
+            <img src={imageUrl} alt={title}/>
+            {sameToppings && quantity !== 0 && (
+                <div>
+                    <div className="food-toppings">
+                        <label className="section-label">Meat:</label>
+                        {cardIndex === 0 && (
+                            <>
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name={`meat-${cardIndex}`}
+                                        value="birria"
+                                        checked={meatSelections[0] === 'birria'}
+                                        onChange={(event) => handleMeatChange(0, event)}
+                                        disabled={inputsDisabled} // Disable input if inputsDisabled is true
+                                    />
+                                    Birria
+                                </label>
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name={`meat-${cardIndex}`}
+                                        value="birria-no-cheese"
+                                        checked={meatSelections[0] === 'birria-no-cheese'}
+                                        onChange={(event) => handleMeatChange(0, event)}
+                                        disabled={inputsDisabled} // Disable input if inputsDisabled is true
+                                    />
+                                    Birria no cheese
+                                </label>
+                            </>)
+                        }
+                        {cardIndex > 0 && (
+                        <>
                         <label>
                             <input
                                 type="radio"
@@ -214,10 +229,12 @@ const FoodCard = ({ title, imageUrl, hasCilantro, hasOnions, meatChoice, hasSame
                                 value="carne-asada"
                                 checked={meatSelections[0] === 'carne-asada'}
                                 onChange={(event) => handleMeatChange(0, event)}
-                                disabled={inputsDisabled} // Disable input if inputsDisabled is true
+                                disabled={true} // Disable input if inputsDisabled is true
                             />
                             Carne Asada
                         </label>
+                        </>
+                        )}
                     </div>
                     <div className="food-toppings">
                         <label className="section-label">Toppings:</label>

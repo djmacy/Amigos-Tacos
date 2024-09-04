@@ -1,6 +1,11 @@
 .container {
     display: flex;
-    justify-content: space-between;
+    min-width: 200px;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    /*margin-left: 20px;
+    margin-right: 20px;*/
 }
 
 .paypal {
@@ -23,7 +28,7 @@
     background: white;
     font-size: 14px;
     color: #3a3a3a;
-    font-family: helvetica, tahoma, calibri, sans-serif;
+    font-family: "Arapey", serif;
 }
 
 button {
@@ -36,10 +41,14 @@ button {
     border-radius: 4px;
     cursor: pointer;
     width: 100%;
-    margin: 8px 0;
+    margin: 8px 1px;
 }
 
 button:hover {
     background-color: #222;
 }
-  
+
+@media (max-width: 400px) {}
+.form {
+    width: 80%;
+}

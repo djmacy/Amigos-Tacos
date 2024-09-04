@@ -296,10 +296,20 @@ insertOrder(orderDetails).then(orderId => {
 //const insertOrders = await insertOrder(orderDetails);
 //const getOrderItems = await getOrderDetails(12);
 //const getFoodItems = await getFoodDetails(12)
-const getTodayOrders = await getTodaysCompletedOrders();
+//const getTodayOrders = await getTodaysCompletedOrders();
 //const getTodaysFoodItems = await getTodaysFoodDetails();
 //console.log(getTodaysFoodItems)
 
 //console.log(orders);
 //console.log(insertOrders);
-console.log(getTodayOrders);
+//console.log(getTodayOrders);
+/*
+import bcrypt from 'bcrypt';
+const saltRounds = 10;
+const myPlaintextPassword = 'password123';
+const someOtherPlaintextPassword = 'not_bacon';
+
+bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+    console.log(hash)
+});
+*/

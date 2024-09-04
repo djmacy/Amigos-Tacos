@@ -2,8 +2,9 @@ import PayPalButtons from "../PayPalButtons.jsx";
 import FoodCard from "../FoodCard.jsx";
 import React, { useEffect, useState } from "react";
 import "./Home.css";
-import birriaPicture from "../../images/quesabirriaImage.jpg";
+import birriaPicture from "../../images/featured-quesabirria-tacos-recipe.png";
 import carneTacoPicture from "../../images/carneAsadaTaco.jpg";
+import lokoTacoPicture from "../../images/Quesabirria Web .jpg"
 import foodCard from "../FoodCard.jsx";
 import Select from "react-select";
 import { useNavigate } from 'react-router-dom';
@@ -18,8 +19,10 @@ const Home = () => {
     const [customer, setCustomer] = useState({});
     const [mexicanCokes, setMexicanCokes] = useState(0); // State for Mexican Cokes quantity
     const [waters, setWaters] = useState(0); // State for Mexican Cokes quantity
+    const [horchata, setHorchata] = useState(0); // State for Mexican Cokes quantity
     const cokePrice = 2;
     const waterPrice = 1;
+    const horchataPrice = 2;
     const [inputsDisabled, setInputsDisabled] = useState(false);
     const [formValues, setFormValues] = useState({
         name: '',
@@ -31,8 +34,8 @@ const Home = () => {
 
     const [foodCards, setFoodCards] = useState([
         { title: "Quesabirrias", imageUrl: birriaPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 4, maxQuantity: 3, quantity: 0 },
-        { title: "Loko Taco", imageUrl: carneTacoPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 3, maxQuantity: 4, quantity: 0 },
-        { title: "Carne Asada Taco", imageUrl: carneTacoPicture, hasOnions: true, hasCilantro: true, meatChoice: 'birria', hasSameToppings: true, price: 3, maxQuantity: 4, quantity: 0 }
+        { title: "Loko Taco", imageUrl: lokoTacoPicture, hasOnions: true, hasCilantro: true, meatChoice: 'carne-asada', hasSameToppings: true, price: 3, maxQuantity: 4, quantity: 0 },
+        { title: "Carne Asada Taco", imageUrl: carneTacoPicture, hasOnions: true, hasCilantro: true, meatChoice: 'carne-asada', hasSameToppings: true, price: 3, maxQuantity: 4, quantity: 0 }
     ]);
     const [paypalButtonTrigger, setPaypalButtonTrigger] = useState(false);
 
@@ -211,6 +214,25 @@ const Home = () => {
         const cokePriceAdjustment = newQuantity * cokePrice;
         setTotalPrice(prevTotalPrice => prevTotalPrice + cokePriceAdjustment - oldPrice);
         setMexicanCokes(newQuantity);
+    };
+
+    const handleHorchataChange = (event) => {
+
+        if (!event) {
+            const newQuantity = 0;
+            const oldPrice = horchata * horchataPrice
+            const horchataPriceAdjustment = 0;
+            setTotalPrice(prevTotalPrice => prevTotalPrice + horchataPriceAdjustment - oldPrice);
+            setHorchata(newQuantity);
+            return
+        }
+        //console.log(event.value);
+        const newQuantity = parseInt(event.value);
+
+        const oldPrice = horchata * horchataPrice
+        const horchataPriceAdjustment = newQuantity * horchataPrice;
+        setTotalPrice(prevTotalPrice => prevTotalPrice + horchataPriceAdjustment - oldPrice);
+        setHorchata(newQuantity);
     };
 
     const handleWaterChange = (event) => {

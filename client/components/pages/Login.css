@@ -1,7 +1,72 @@
-.login-form {
-    padding-top: 300px;
+
+.login-container {
     display: flex;
     justify-content: center;
-    text-align: center;
     align-items: center;
+    height: calc(90vh - 17vh); /* Subtract the navbar height from the viewport height */
+    margin-top: 17vh; /* Offset the container to start below the navbar */
+    /*background-color: #1b1b1b; /* Optional: background color */
+}
+
+
+
+/* Login Form Container */
+.login-form {
+    background-color: #eebd7d;
+    padding: 20px; /* Re-added padding for internal spacing */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    /*margin-top: 300px;*/
+    text-align: center;
+}
+
+/* Form Elements */
+.login-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #1b1b1b;
+    font-weight: bold;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #d1caba;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    color: #1b1b1b;
+    font-family: "Arapey", serif;
+}
+
+.login-form input[type="text"]::placeholder,
+.login-form input[type="password"]::placeholder {
+    color: #999;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #1b1b1b;
+    color: #eebd7d;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-form button:hover {
+    background-color: #333;
+}
+
+/* Message Styling */
+.login-form p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: white;
+    font-family: "Arapey", serif;
+    text-align: center;
 }

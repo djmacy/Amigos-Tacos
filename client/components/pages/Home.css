@@ -113,7 +113,9 @@
 }
 
 .pay-pal-buttons-home {
-    padding-top: 100px;
+    padding-top: 50px;
+    /*margin-left: -30px;*/
+    /*width: 100%;*/
     display: flex;
     justify-content: center;
     text-align: center;
