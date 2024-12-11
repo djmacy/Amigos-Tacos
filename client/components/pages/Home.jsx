@@ -26,6 +26,8 @@ const Home = () => {
     const horchataPrice = 2;
     const jamaicaPrice = 2;
     const [inputsDisabled, setInputsDisabled] = useState(false);
+    const [canMessage, setCanMessage] = useState(false);
+
     const [formValues, setFormValues] = useState({
         name: '',
         phone: '',
@@ -191,6 +193,10 @@ const Home = () => {
             setTotalPrice(prevTotalPrice => prevTotalPrice + (newDeliveryState ? 5 : -5));
             return newDeliveryState;
         });
+    };
+
+    const handleMessageChange = (event) => {
+        setCanMessage(event.target.checked);
     };
 
     const handleSalsaVerdeChange = (event) => {
@@ -531,7 +537,25 @@ const Home = () => {
                                 />
                             </div>
                         </div>
-
+                        <p style={{marginBottom: "0.25rem"}}>Consent Checkbox:</p>
+                        <label className="consent-checkbox">
+                            <input
+                                type="checkbox"
+                                name="delivery"
+                                checked={canMessage}
+                                onChange={handleMessageChange}
+                                className="checkbox-input"
+                            />
+                            <span className="checkbox-text">
+                                I consent to receive SMS Notifications from Amigos Tacos. Message frequency varies.
+                                Message & data rates may apply. You can reply STOP to unsubscribe at any time.
+                            </span>
+                        </label>
+                        <div className="pp-ts">
+                            <a href="/privacy-policy" target="_blank">Privacy Policy</a>
+                            <p style={{marginLeft: "0.75rem", marginRight: "0.75rem"}}>|</p>
+                            <a href="/terms-of-service" target="_blank">Terms of Service</a>
+                        </div>
 
                         <p className="total-price-label">Total Price: ${totalPrice}</p>
                         {isFormValid() &&

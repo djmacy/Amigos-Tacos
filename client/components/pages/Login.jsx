@@ -10,6 +10,8 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
+    //kitchenUser
+    //password123
     const handleLogin = async (e) => {
         e.preventDefault();
        // console.log(username, password)

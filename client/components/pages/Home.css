@@ -140,3 +140,26 @@
 }
 
 
+.consent-checkbox {
+    display: flex;
+    align-items: center; /* Ensures checkbox and text are aligned properly */
+    margin-bottom: 0.5rem; /* Add some space between this and any elements below */
+}
+
+.checkbox-input {
+    margin-right: 12px; /* Space between checkbox and text */
+}
+
+.checkbox-text {
+    font-size: 14px;
+    color: #555; /* Dark grey for the text */
+    line-height: 1.5; /* Improves readability of the message */
+    text-align: justify;
+}
+
+.pp-ts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

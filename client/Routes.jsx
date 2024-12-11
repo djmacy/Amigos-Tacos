@@ -5,6 +5,8 @@ import Login from './components/pages/Login.jsx';
 import Orders from './components/pages/Orders.jsx';
 import ThankYou from './components/pages/ThankYou.jsx'
 import ProtectedRoute from './ProtectedRoute';
+import TermsOfService from "./components/pages/TermsOfService.jsx";
+import PrivacyPolicy from "./components/pages/PrivacyPolicy.jsx";
 
 const RoutesComponent = () => {
     return (
@@ -14,7 +16,8 @@ const RoutesComponent = () => {
                 <Route path="/login" element={<Login />}/>
                 <Route path="/orders" element={<ProtectedRoute element={<Orders />} />} />
                 <Route path="/thank-you" element={<ThankYou />} />
-
+                <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+                <Route path="/terms-of-service" element={<TermsOfService />} />
             </Routes>
         </Router>
     );
